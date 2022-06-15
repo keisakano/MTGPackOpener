@@ -1,2 +1,0 @@
-# MTGPackOpener
-MTG Pack Simulator
