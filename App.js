@@ -29,19 +29,18 @@ function HomeScreen() {
     hitAPI()
   }, [])
 
-
+  const renderItem = ({ item }) => (
+    <TouchableOpacity>
+      <Text>{item.name}</Text>
+    </TouchableOpacity>
+  )
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <FlatList
         data={cardSets}
-        renderItem={({ item }) => (
-          // ^^not quite sure how renderItem works, ask Luke
-          <TouchableOpacity>
-            <Text>{item.name}</Text>
-          </TouchableOpacity>
-        )}
-
+        renderItem={renderItem}
+        keyExtractor={item => item.code}
       />
     </View>
   );
