@@ -13,27 +13,25 @@ function HomeScreen() {
 
   async function hitAPI() {
     const result = await axios.get('https://api.magicthegathering.io/v1/sets');
-    setCardSets(result.data.sets.length)
-  }
-
-  const [counter, setCounter] = useState(0);
-  useEffect(() => {
-    console.log('counter: ', counter)
-  }, [counter])
-
-  function IncrementCounter() {
-    setCounter(counter + 1);
+    const setsData = result.data.sets;
+    setCardSets(setsData.length)
+    for (let cardSets of setsData) {
+      console.log(cardSets)
+    }
   }
 
   const [cardSets, setCardSets] = useState(0);
+
   console.log(cardSets);
+
+
   useEffect(() => {
     hitAPI()
   }, [])
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <TouchableOpacity onPress={IncrementCounter}>
+      <TouchableOpacity>
         <Text>{cardSets}</Text>
       </TouchableOpacity>
 
