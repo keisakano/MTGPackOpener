@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import setButton from './src/components/setButton';
-import Details from './src/screens/Details';
+import Details from './screens/Details';
 
 const axios = require('axios');
 
@@ -32,13 +32,13 @@ function HomeScreen() {
   }, [])
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('Details')}>
+    <TouchableOpacity onPress={() => goToDetails()}>
       <Text>{item.name}</Text>
     </TouchableOpacity>
   )
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: '10px' }}>
       <FlatList
         data={cardSets}
         renderItem={renderItem}
