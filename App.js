@@ -7,14 +7,8 @@ import setButton from './src/components/setButton';
 import Details from './screens/Details';
 import ResultsList from './src/components/ResultsList';
 
-const axios = require('axios');
-
-
 
 function HomeScreen() {
-
-  const navigation = useNavigation();
-  const goToDetails = () => navigation.navigate('Details');
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: '10px' }}>

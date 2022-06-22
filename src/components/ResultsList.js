@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import DetailsList from './DetailsList';
 
 const axios = require('axios');
 
@@ -13,36 +12,44 @@ const ResultsList = () => {
     const hitAPI = async function () {
         const result = await axios.get('https://api.magicthegathering.io/v1/sets');
         const setsData = result.data.sets;
-        const cardData = await axios.get('https://api.magicthegathering.io/v1/sets/ktk/booster')
-        console.log(cardData.data.cards);
-        // setCardSets(setsData.length)
-        setCardSets(setsData)
-        // for (let cardSets of setsData) {
-        //     console.log(cardSets)
-        // }
+        const cardResult = await axios.get('https://api.magicthegathering.io/v1/sets/ktk/booster');
+        const cardData = cardResult.data.cards;
+        console.log(cardData);
+        setCardSets(setsData);
+        setCardName(cardData);
     }
 
     const [cardSets, setCardSets] = useState(0);
+    const [cardName, setCardName] = useState(0);
+    const [renderView, setRenderView] = useState(false);
 
     useEffect(() => {
         hitAPI()
     }, [])
 
+    const renderCards = ({ item }) => {
+        <Text>{item.name}</Text>
+    }
     const detailView = () => {
-        <View>
-            <FlatList
-
-            />
-        </View>
+        return (
+            <View>
+                <FlatList
+                    data={cardName}
+                    renderItem={renderCards}
+                    keyExtractor={item => item.id}
+                />
+            </View>
+        )
     }
 
     const renderItem = ({ item }) => (
         // <TouchableOpacity onPress={() => goToDetails()}>
-        <TouchableOpacity onPress={() => goToDetails()}>
+        <TouchableOpacity onPress={() => setRenderView(true)}>
             <Text>{item.name}</Text>
         </TouchableOpacity>
         // <DetailsList title={item.name} onPress={() => goToDetails()} />
     )
+
     return (
         <FlatList
             data={cardSets}
@@ -50,6 +57,7 @@ const ResultsList = () => {
             keyExtractor={item => item.code}
         />
     )
+
 }
 
 export default ResultsList;
