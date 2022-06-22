@@ -7,7 +7,7 @@ const axios = require('axios');
 
 const ResultsList = () => {
     const navigation = useNavigation();
-    const goToDetails = () => navigation.navigate('Details');
+    const goToBooster = ({ setName, setCode }) => navigation.navigate('Booster', { setName, setCode });
 
     const hitAPI = async function () {
         const result = await axios.get('https://api.magicthegathering.io/v1/sets');
@@ -21,34 +21,35 @@ const ResultsList = () => {
 
     const [cardSets, setCardSets] = useState(0);
     const [cardName, setCardName] = useState(0);
-    const [renderView, setRenderView] = useState(false);
 
     useEffect(() => {
         hitAPI()
     }, [])
 
-    const renderCards = ({ item }) => {
-        <Text>{item.name}</Text>
-    }
-    const detailView = () => {
+    // const renderCards = ({ item }) => {
+    //     <Text>{item.name}</Text>
+    // }
+    // const detailView = () => {
+    //     return (
+    //         <View>
+    //             <FlatList
+    //                 data={cardName}
+    //                 renderItem={renderCards}
+    //                 keyExtractor={item => item.id}
+    //             />
+    //         </View>
+    //     )
+    // }
+
+
+    const renderItem = ({ item }) => {
+        const { name: setName, code: setCode } = item;
         return (
-            <View>
-                <FlatList
-                    data={cardName}
-                    renderItem={renderCards}
-                    keyExtractor={item => item.id}
-                />
-            </View>
+            <TouchableOpacity onPress={() => goToBooster({ setName, setCode })}>
+                <Text>{setName}</Text>
+            </TouchableOpacity>
         )
     }
-
-    const renderItem = ({ item }) => (
-        // <TouchableOpacity onPress={() => goToDetails()}>
-        <TouchableOpacity onPress={() => setRenderView(true)}>
-            <Text>{item.name}</Text>
-        </TouchableOpacity>
-        // <DetailsList title={item.name} onPress={() => goToDetails()} />
-    )
 
     return (
         <FlatList

@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import setButton from './src/components/setButton';
-import Details from './screens/Details';
+import Booster from './screens/Booster';
 import ResultsList from './src/components/ResultsList';
 
 
@@ -30,7 +30,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Details" component={Details} />
+        <Stack.Screen name="Booster" component={Booster} />
       </Stack.Navigator>
     </NavigationContainer>
   );
