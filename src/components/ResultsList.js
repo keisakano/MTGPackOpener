@@ -14,7 +14,7 @@ const ResultsList = () => {
         const setsData = result.data.sets;
         const cardResult = await axios.get('https://api.magicthegathering.io/v1/sets/ktk/booster');
         const cardData = cardResult.data.cards;
-        console.log(cardData);
+        // console.log(cardData);
         setCardSets(setsData);
         setCardName(cardData);
     }
@@ -26,33 +26,26 @@ const ResultsList = () => {
         hitAPI()
     }, [])
 
-    // const renderCards = ({ item }) => {
-    //     <Text>{item.name}</Text>
-    // }
-    // const detailView = () => {
-    //     return (
-    //         <View>
-    //             <FlatList
-    //                 data={cardName}
-    //                 renderItem={renderCards}
-    //                 keyExtractor={item => item.id}
-    //             />
-    //         </View>
-    //     )
-    // }
-
-
     const renderItem = ({ item }) => {
         const { name: setName, code: setCode } = item;
         return (
             <TouchableOpacity onPress={() => goToBooster({ setName, setCode })}>
-                <Text>{setName}</Text>
+                <Text style={styles.listItems}>{setName}</Text>
             </TouchableOpacity>
         )
     }
 
+    const header = () => {
+        return (
+            <View>
+                <Text style={styles.header}>MTG Sets</Text>
+            </View>
+        );
+    };
+
     return (
         <FlatList
+            ListHeaderComponent={header}
             data={cardSets}
             renderItem={renderItem}
             keyExtractor={item => item.code}
@@ -60,5 +53,14 @@ const ResultsList = () => {
     )
 
 }
+
+const styles = StyleSheet.create({
+    header: {
+        fontSize: 50, fontWeight: 'bold', textAlign: 'center'
+    },
+    listItems: {
+        fontSize: 20
+    }
+})
 
 export default ResultsList;

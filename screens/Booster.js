@@ -12,6 +12,8 @@ export default function Booster() {
         const fetchedBooster = await axios.get(`https://api.magicthegathering.io/v1/sets/${setCode}/booster`);
         const cardData = fetchedBooster.data.cards
         setCards(cardData);
+        console.log(cardData)
+
     }
 
     const [cards, setCards] = useState(0);
@@ -23,13 +25,12 @@ export default function Booster() {
     const renderItem = ({ item }) => (
         <View>
             <Text>{item.name}</Text>
-            <Image source={item.imageUrl} />
+            <Image style={{ height: 300, width: 225 }} source={{ uri: item.imageUrl }} />
         </View>
-    )
-
+    );
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={styles.booster}>
             <FlatList
                 data={cards}
                 renderItem={renderItem}
@@ -38,4 +39,10 @@ export default function Booster() {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    booster: {
+        flex: 1, alignItems: 'center', textAlign: 'center', justifyContent: 'center'
+    }
+});
 
