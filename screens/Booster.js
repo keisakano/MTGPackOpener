@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
 import { useRoute } from '@react-navigation/core';
 import App from '../App';
+import style from '../constants/BoosterFlip.css'
+
 const axios = require('axios');
 
 
@@ -32,6 +34,7 @@ export default function Booster() {
     return (
         <View style={styles.booster}>
             <FlatList
+                showsVerticalScrollIndicator={false}
                 data={cards}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
@@ -44,5 +47,7 @@ const styles = StyleSheet.create({
     booster: {
         flex: 1, alignItems: 'center', textAlign: 'center', justifyContent: 'center'
     }
+
+
 });
 

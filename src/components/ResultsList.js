@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import SearchBar from './SearchBar';
 
 const axios = require('axios');
 
@@ -38,13 +39,14 @@ const ResultsList = () => {
     const header = () => {
         return (
             <View>
-                <Text style={styles.header}>MTG Sets</Text>
+                <SearchBar />
             </View>
         );
     };
 
     return (
         <FlatList
+            showsVerticalScrollIndicator={false}
             ListHeaderComponent={header}
             data={cardSets}
             renderItem={renderItem}
@@ -60,7 +62,8 @@ const styles = StyleSheet.create({
     },
     listItems: {
         fontSize: 20
-    }
+    },
+
 })
 
 export default ResultsList;
