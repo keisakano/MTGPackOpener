@@ -11,10 +11,14 @@ const ResultsList = () => {
     const goToBooster = ({ setName, setCode }) => navigation.navigate('Booster', { setName, setCode });
 
     const hitAPI = async function () {
-        const result = await axios.get('https://api.magicthegathering.io/v1/sets');
-        const setsData = result.data.sets;
+        // const result = await axios.get('https://api.magicthegathering.io/v1/sets');
+        const result = await axios.get('https://api.scryfall.com/sets');
+        // const setsData = result.data.sets;
+        const setsData = result.data.data;
         // ^^filter for values only with type === expansion || type === core
         setCardSets(setsData);
+        console.log(result)
+        // console.log(goodResult)
     }
 
     const [cardSets, setCardSets] = useState(0);
