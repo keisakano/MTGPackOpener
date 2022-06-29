@@ -7,6 +7,7 @@ export default function SearchBar() {
         <View style={styles.search}>
             <TextInput
                 placeholder="Search Sets"
+            // ^^figure out how to remove default styling when selected
             ></TextInput>
         </View>
     )
@@ -16,6 +17,11 @@ export default function SearchBar() {
 const styles = StyleSheet.create({
     search: {
         borderWidth: 2,
-        borderColor: 'black'
+        borderColor: 'black',
+        paddingVertical: 5,
+        paddingHorizontal: 3,
+        marginVertical: 10,
+        borderRadius: 5,
+        fontSize: 15
     }
 })

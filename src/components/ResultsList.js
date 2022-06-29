@@ -13,15 +13,11 @@ const ResultsList = () => {
     const hitAPI = async function () {
         const result = await axios.get('https://api.magicthegathering.io/v1/sets');
         const setsData = result.data.sets;
-        const cardResult = await axios.get('https://api.magicthegathering.io/v1/sets/ktk/booster');
-        const cardData = cardResult.data.cards;
-        // console.log(cardData);
+        // ^^filter for values only with type === expansion || type === core
         setCardSets(setsData);
-        setCardName(cardData);
     }
 
     const [cardSets, setCardSets] = useState(0);
-    const [cardName, setCardName] = useState(0);
 
     useEffect(() => {
         hitAPI()
@@ -30,7 +26,9 @@ const ResultsList = () => {
     const renderItem = ({ item }) => {
         const { name: setName, code: setCode } = item;
         return (
-            <TouchableOpacity onPress={() => goToBooster({ setName, setCode })}>
+            <TouchableOpacity
+                style={styles.touchables}
+                onPress={() => goToBooster({ setName, setCode })}>
                 <Text style={styles.listItems}>{setName}</Text>
             </TouchableOpacity>
         )
@@ -63,7 +61,9 @@ const styles = StyleSheet.create({
     listItems: {
         fontSize: 20
     },
-
+    touchables: {
+        marginVertical: 5
+    }
 })
 
 export default ResultsList;

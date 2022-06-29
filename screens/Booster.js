@@ -25,8 +25,8 @@ export default function Booster() {
     }, [])
 
     const renderItem = ({ item }) => (
-        <View>
-            <Text>{item.name}</Text>
+        <View style={styles.container}>
+            <Text style={styles.text}>{item.name}</Text>
             <Image style={{ height: 300, width: 225 }} source={{ uri: item.imageUrl }} />
         </View>
     );
@@ -46,6 +46,15 @@ export default function Booster() {
 const styles = StyleSheet.create({
     booster: {
         flex: 1, alignItems: 'center', textAlign: 'center', justifyContent: 'center'
+    },
+    container: {
+        paddingVertical: 3,
+        marginVertical: 5
+    },
+    text: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 2
     }
 
 
