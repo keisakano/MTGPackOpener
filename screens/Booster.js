@@ -13,9 +13,18 @@ export default function Booster() {
     const renderCards = async () => {
         // const fetchedBooster = await axios.get(`https://api.magicthegathering.io/v1/sets/${setCode}/booster`);
         const fetchedSet = await axios.get(`https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3A${setCode}&unique=prints`);
-        const cardData = fetchedSet.data.data
-        setCards(cardData);
-        console.log(cardData)
+        const allCardsData = fetchedSet.data
+        const { data: cardData, has_more, next_page: getMoreCardsURL } = allCardsData;
+        let allCards = [];
+        allCards = [...allCards, ...cardData];
+
+        if (has_more) {
+            const getMoreCards = await axios.get(getMoreCardsURL);
+            const moreCardsResult = getMoreCards.data
+            const { data: moreCards } = moreCardsResult;
+            allCards = [...allCards, ...moreCards]
+        }
+        setCards(allCards);
     }
 
     const createBooster = () => {
@@ -23,11 +32,11 @@ export default function Booster() {
         const commonResult = cards.filter(card => card.rarity === 'common');
         for (let i = 0; i < 10; i++) {
             const value = Math.floor(Math.random() * commonResult.length) + 1;
-            console.log(value);
+            // console.log(value);
 
             fullPack = [...fullPack, commonResult[value]];
         }
-        console.log(fullPack)
+        // console.log(fullPack)
     }
 
     const [cards, setCards] = useState(0);
