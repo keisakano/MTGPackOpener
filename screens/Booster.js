@@ -11,8 +11,9 @@ export default function Booster() {
     const { params: { setName, setCode } } = useRoute();
     console.log(setName, setCode)
     const renderCards = async () => {
-        const fetchedBooster = await axios.get(`https://api.magicthegathering.io/v1/sets/${setCode}/booster`);
-        const cardData = fetchedBooster.data.cards
+        // const fetchedBooster = await axios.get(`https://api.magicthegathering.io/v1/sets/${setCode}/booster`);
+        const fetchedBooster = await axios.get(`https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3A${setCode}&unique=prints`);
+        const cardData = fetchedBooster.data.data
         setCards(cardData);
         console.log(cardData)
 
@@ -24,12 +25,36 @@ export default function Booster() {
         renderCards()
     }, [])
 
-    const renderItem = ({ item }) => (
-        <View style={styles.container}>
-            <Text style={styles.text}>{item.name}</Text>
-            <Image style={{ height: 300, width: 225 }} source={{ uri: item.imageUrl }} />
-        </View>
-    );
+    const getCardArtURI = ({ item }) => {
+        const hasCardFaces = item?.card_faces;
+        if (hasCardFaces) {
+            const { 0: { image_uris: { normal: faceOneUri } }, 1: { image_uris: { normal: { faceTwoUri } } } } = hasCardFaces;
+            return { faceOneUri, faceTwoUri };
+        } else {
+            const { image_uris } = item;
+            const { normal = "" } = image_uris ?? {};
+            return { faceOneUri: normal };
+        }
+    }
+    const renderItem = ({ item }) => {
+        const { faceOneUri, faceTwoUri } = getCardArtURI({ item });
+        if (faceTwoUri) {
+            return (
+                <View style={styles.container}>
+                    <Text style={styles.text}>{item.name}</Text>
+                    <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
+                    <Image style={{ height: 300, width: 225 }} source={{ uri: faceTwoUri }} />
+                </View>
+            )
+        } else {
+            return (
+                <View style={styles.container}>
+                    <Text style={styles.text}>{item.name}</Text>
+                    <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
+                </View>
+            )
+        }
+    };
 
     return (
         <View style={styles.booster}>
