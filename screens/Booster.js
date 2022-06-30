@@ -25,29 +25,52 @@ export default function Booster() {
             allCards = [...allCards, ...moreCards]
         }
         setCards(allCards);
+        console.log(allCards);
     }
 
-    const createBooster = () => {
-        let fullPack = [];
-        const commonResult = cards.filter(card => card.rarity === 'common');
-        for (let i = 0; i < 10; i++) {
-            const value = Math.floor(Math.random() * commonResult.length) + 1;
-            // console.log(value);
 
-            fullPack = [...fullPack, commonResult[value]];
-        }
-        // console.log(fullPack)
-    }
 
     const [cards, setCards] = useState(0);
 
     useEffect(() => {
-        renderCards()
+        renderCards();
     }, [])
+
+    useEffect(() => {
+        if (cards.length > 0) {
+            const sortCards = (cards) => {
+                const commonResult = cards.filter(card => card.rarity === 'common');
+                const uncommonResult = cards.filter(card => card.rarity === 'uncommon');
+                const rareResult = cards.filter(card => card.rarity === 'rare');
+                const mythicResult = cards.filter(card => card.rarity === 'mythic');
+
+                return { commonResult, uncommonResult, rareResult, mythicResult }
+            }
+        }
+    }, [cards])
+
+    const generateBooster = ({ commonResult, uncommonResult, rareResult, mythicResult }) => {
+        let fullPack = [];
+        for (let i = 0; i < 10; i++) {
+            const value = Math.floor(Math.random() * commonResult.length) + 1;
+            // console.log(value);
+            fullPack = [...fullPack, commonResult[value]];
+        }
+        for (let i = 0; i < 3; i++) {
+            const value = Math.floor(Math.random() * uncommonResult.length) + 1;
+            fullPack = [...fullPack, uncommonResult[value]];
+        }
+        for (let i = 0; i < 1; i++) {
+            const value = Math.floor(Math.random() * rareResult.length) + 1;
+            fullPack = [...fullPack, rareResult[value]];
+        }
+        console.log(fullPack);
+    }
 
 
     const getCardArtURI = ({ item }) => {
-        createBooster();
+        generateBooster();
+
         const hasCardFaces = item?.card_faces;
         if (hasCardFaces) {
             const { 0: { image_uris: { normal: faceOneUri } }, 1: { image_uris: { normal: faceTwoUri } } } = hasCardFaces;
