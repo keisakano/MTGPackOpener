@@ -12,11 +12,22 @@ export default function Booster() {
     console.log(setName, setCode)
     const renderCards = async () => {
         // const fetchedBooster = await axios.get(`https://api.magicthegathering.io/v1/sets/${setCode}/booster`);
-        const fetchedBooster = await axios.get(`https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3A${setCode}&unique=prints`);
-        const cardData = fetchedBooster.data.data
+        const fetchedSet = await axios.get(`https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3A${setCode}&unique=prints`);
+        const cardData = fetchedSet.data.data
         setCards(cardData);
         console.log(cardData)
+    }
 
+    const createBooster = () => {
+        let fullPack = [];
+        const commonResult = cards.filter(card => card.rarity === 'common');
+        for (let i = 0; i < 10; i++) {
+            const value = Math.floor(Math.random() * commonResult.length) + 1;
+            console.log(value);
+
+            fullPack = [...fullPack, commonResult[value]];
+        }
+        console.log(fullPack)
     }
 
     const [cards, setCards] = useState(0);
@@ -25,10 +36,12 @@ export default function Booster() {
         renderCards()
     }, [])
 
+
     const getCardArtURI = ({ item }) => {
+        createBooster();
         const hasCardFaces = item?.card_faces;
         if (hasCardFaces) {
-            const { 0: { image_uris: { normal: faceOneUri } }, 1: { image_uris: { normal: { faceTwoUri } } } } = hasCardFaces;
+            const { 0: { image_uris: { normal: faceOneUri } }, 1: { image_uris: { normal: faceTwoUri } } } = hasCardFaces;
             return { faceOneUri, faceTwoUri };
         } else {
             const { image_uris } = item;
@@ -42,8 +55,8 @@ export default function Booster() {
             return (
                 <View style={styles.container}>
                     <Text style={styles.text}>{item.name}</Text>
-                    <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
-                    <Image style={{ height: 300, width: 225 }} source={{ uri: faceTwoUri }} />
+                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
+                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
                 </View>
             )
         } else {
