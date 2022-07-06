@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react
 import { useRoute } from '@react-navigation/core';
 import App from '../App';
 import style from '../constants/BoosterFlip.css'
+import setButton from '../src/components/setButton';
 
 const axios = require('axios');
 
@@ -25,7 +26,7 @@ export default function Booster() {
             allCards = [...allCards, ...moreCards]
         }
         setCards(allCards);
-        console.log(allCards);
+        // console.log(allCards);
     }
 
 
@@ -36,18 +37,26 @@ export default function Booster() {
         renderCards();
     }, [])
 
+    const sortCards = (cards) => {
+        const commonResult = cards.filter(card => card.rarity === 'common');
+        const uncommonResult = cards.filter(card => card.rarity === 'uncommon');
+        const rareResult = cards.filter(card => card.rarity === 'rare');
+        const mythicResult = cards.filter(card => card.rarity === 'mythic');
+
+        return { commonResult, uncommonResult, rareResult, mythicResult };
+    }
+
+    const [booster, setBooster] = useState([])
     useEffect(() => {
         if (cards.length > 0) {
-            const sortCards = (cards) => {
-                const commonResult = cards.filter(card => card.rarity === 'common');
-                const uncommonResult = cards.filter(card => card.rarity === 'uncommon');
-                const rareResult = cards.filter(card => card.rarity === 'rare');
-                const mythicResult = cards.filter(card => card.rarity === 'mythic');
-
-                return { commonResult, uncommonResult, rareResult, mythicResult }
-            }
+            const sortedCards = sortCards(cards);
+            const { commonResult, uncommonResult, rareResult, mythicResult } = sortedCards;
+            const fullPack = generateBooster({ commonResult, uncommonResult, rareResult, mythicResult })
+            setBooster(fullPack)
         }
     }, [cards])
+
+
 
     const generateBooster = ({ commonResult, uncommonResult, rareResult, mythicResult }) => {
         let fullPack = [];
@@ -60,16 +69,15 @@ export default function Booster() {
             const value = Math.floor(Math.random() * uncommonResult.length) + 1;
             fullPack = [...fullPack, uncommonResult[value]];
         }
-        for (let i = 0; i < 1; i++) {
-            const value = Math.floor(Math.random() * rareResult.length) + 1;
-            fullPack = [...fullPack, rareResult[value]];
-        }
+        const value = Math.floor(Math.random() * rareResult.length) + 1;
+        fullPack = [...fullPack, rareResult[value]];
+
         console.log(fullPack);
+        return fullPack;
     }
 
 
     const getCardArtURI = ({ item }) => {
-        generateBooster();
 
         const hasCardFaces = item?.card_faces;
         if (hasCardFaces) {
@@ -105,7 +113,7 @@ export default function Booster() {
         <View style={styles.booster}>
             <FlatList
                 showsVerticalScrollIndicator={false}
-                data={cards}
+                data={booster}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
             />
