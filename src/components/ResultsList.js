@@ -16,16 +16,25 @@ const ResultsList = () => {
         // const setsData = result.data.sets;
         const setsData = result.data.data;
         // ^^filter for values only with type === expansion || type === core
+        const sR = setsData.filter(set => set.set_type === 'expansion' || set.set_type === 'core');
+        console.log(sR);
         setCardSets(setsData);
-        console.log(result)
-        // console.log(goodResult)
+        console.log(setsData)
+        setSortedSets(sR);
+        // console.log(result)
     }
 
-    const [cardSets, setCardSets] = useState(0);
+    const [cardSets, setCardSets] = useState([]);
+
+
 
     useEffect(() => {
         hitAPI()
     }, [])
+
+    const [sortedSets, setSortedSets] = useState([]);
+
+
 
     const renderItem = ({ item }) => {
         const { name: setName, code: setCode } = item;
@@ -50,7 +59,7 @@ const ResultsList = () => {
         <FlatList
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={header}
-            data={cardSets}
+            data={sortedSets}
             renderItem={renderItem}
             keyExtractor={item => item.code}
         />
