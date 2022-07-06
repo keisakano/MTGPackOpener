@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react
 import { useRoute } from '@react-navigation/core';
 import App from '../App';
 import style from '../constants/BoosterFlip.css'
-import setButton from '../src/components/setButton';
 
 const axios = require('axios');
 
