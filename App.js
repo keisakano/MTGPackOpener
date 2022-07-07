@@ -10,7 +10,7 @@ import ResultsList from './src/components/ResultsList';
 function HomeScreen() {
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: '10px' }}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 10 }}>
       <ResultsList />
     </View>
   );

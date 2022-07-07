@@ -60,26 +60,30 @@ export default function Booster() {
     const generateBooster = ({ commonResult, uncommonResult, rareResult, mythicResult, basicResult }) => {
         let fullPack = [];
         for (let i = 0; i < 10; i++) {
-            const value = Math.floor(Math.random() * commonResult.length) + 1;
-            // console.log(value);
-            fullPack = [...fullPack, commonResult[value]];
+            const value = Math.floor(Math.random() * commonResult.length);
+            // console.log('commonResult.length: ', commonResult.length);
+            let storedCommon = commonResult[value];
+            fullPack = [...fullPack, storedCommon];
+            // console.log('storedCommon: ', storedCommon)
+            // console.log('value: ', value)
             commonResult.splice(value, 1);
         }
         for (let i = 0; i < 3; i++) {
-            const value = Math.floor(Math.random() * uncommonResult.length) + 1;
+            const value = Math.floor(Math.random() * uncommonResult.length);
             fullPack = [...fullPack, uncommonResult[value]];
             uncommonResult.splice(value, 1);
         }
-        const mythicChance = Math.floor(Math.random() * 6) + 1;
+        const mythicChance = Math.floor(Math.random() * 6);
+        console.log('mythicChance: ', mythicChance)
 
-        if (mythicChance === 6) {
-            const value = Math.floor(Math.random() * mythicResult.length) + 1;
+        if (mythicChance === 5) {
+            const value = Math.floor(Math.random() * mythicResult.length);
             fullPack = [...fullPack, mythicResult[value]];
         } else {
-            const value = Math.floor(Math.random() * rareResult.length) + 1;
+            const value = Math.floor(Math.random() * rareResult.length);
             fullPack = [...fullPack, rareResult[value]];
         }
-        const value = Math.floor(Math.random() * basicResult.length) + 1;
+        const value = Math.floor(Math.random() * basicResult.length);
         fullPack = [...fullPack, basicResult[value]];
 
         console.log(fullPack);
@@ -88,10 +92,11 @@ export default function Booster() {
 
 
     const getCardArtURI = ({ item }) => {
-
+        const hasTwoFaces = item?.card_faces?.[0].image_uris
         const hasCardFaces = item?.card_faces;
-        if (hasCardFaces) {
-            const { 0: { image_uris: { normal: faceOneUri } }, 1: { image_uris: { normal: faceTwoUri } } } = hasCardFaces;
+
+        if (hasTwoFaces) {
+            const { 0: { image_uris: { normal: faceOneUri = '' } = {} } = {}, 1: { image_uris: { normal: faceTwoUri = '' } = {} } = {} } = hasCardFaces;
             return { faceOneUri, faceTwoUri };
         } else {
             const { image_uris } = item;
@@ -126,7 +131,7 @@ export default function Booster() {
                 showsVerticalScrollIndicator={false}
                 data={booster}
                 renderItem={renderItem}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item?.id}
             />
             <TouchableOpacity
                 style={styles.touchable}

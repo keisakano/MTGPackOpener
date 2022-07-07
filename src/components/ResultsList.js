@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput, SafeAreaView, Image } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 const axios = require('axios');
@@ -10,14 +10,11 @@ const ResultsList = () => {
     const goToBooster = ({ setName, setCode }) => navigation.navigate('Booster', { setName, setCode });
 
     const hitAPI = async function () {
-        // const result = await axios.get('https://api.magicthegathering.io/v1/sets');
         const result = await axios.get('https://api.scryfall.com/sets');
-        // const setsData = result.data.sets;
         const setsData = result.data.data;
-        // ^^filter for values only with type === expansion || type === core
         const sR = setsData.filter(set => set.set_type === 'expansion' || set.set_type === 'core');
-        // console.log(sR);
         setCardSets(setsData);
+        // console.log(sR)
         setSortedSets(sR);
     }
 
@@ -33,12 +30,17 @@ const ResultsList = () => {
     }, [])
 
     const renderItem = ({ item }) => {
-        const { name: setName, code: setCode } = item;
+        const { name: setName, code: setCode, icon_svg_uri: setImg } = item;
         return (
             <TouchableOpacity
                 style={styles.touchables}
                 onPress={() => goToBooster({ setName, setCode })}>
-                <Text style={styles.listItems}>{setName}</Text>
+                <Text style={styles.listItems}>
+                    <Image
+                        source={setImg}
+                        style={styles.setIcon}
+                    />
+                    {setName}</Text>
             </TouchableOpacity>
         )
     }
@@ -50,32 +52,10 @@ const ResultsList = () => {
     const names = sortedSets;
 
     const filteredSets = names.filter(set => {
-        // console.log(set.name)
         return (
             set.name.toLowerCase().includes(searchField.toLowerCase())
         )
     })
-    // console.log(filteredSets)
-
-    // useEffect(() => {
-    //     console.log('prop', names)
-    // }, [])
-
-
-
-    // const header = () => {
-    //     return (
-    //         <View style={styles.search}>
-    //             <TextInput
-    //                 placeholder="Search Sets"
-    //                 id="searchInput"
-    //                 onChange={handleChange}
-    //                 value={searchField}
-    //             // ^^figure out how to remove default styling when selected
-    //             ></TextInput>
-    //         </View>
-    //     );
-    // };
 
     return (
         <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
@@ -101,7 +81,7 @@ const ResultsList = () => {
 const styles = StyleSheet.create({
 
     listItems: {
-        fontSize: 20
+        fontSize: 20,
     },
     touchables: {
         marginVertical: 5
@@ -115,6 +95,11 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         borderRadius: 5,
         fontSize: 15
+    },
+    setIcon: {
+        height: 15,
+        width: 15,
+        marginRight: 5
     }
 })
 
