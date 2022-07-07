@@ -7,9 +7,7 @@ const axios = require('axios');
 
 export default function Booster() {
     const { params: { setName, setCode } } = useRoute();
-    console.log(setName, setCode)
     const renderCards = async () => {
-        // const fetchedBooster = await axios.get(`https://api.magicthegathering.io/v1/sets/${setCode}/booster`);
         const fetchedSet = await axios.get(`https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3A${setCode}&unique=prints`);
         const allCardsData = fetchedSet.data
         const { data: cardData, has_more, next_page: getMoreCardsURL } = allCardsData;
@@ -23,10 +21,7 @@ export default function Booster() {
             allCards = [...allCards, ...moreCards]
         }
         setCards(allCards);
-        // console.log(allCards);
     }
-
-
 
     const [cards, setCards] = useState(0);
 
@@ -35,39 +30,57 @@ export default function Booster() {
     }, [])
 
     const sortCards = (cards) => {
-        const commonResult = cards.filter(card => card.rarity === 'common');
+        const commonResult = cards.filter(card => card.rarity === 'common' && card.type_line.includes('Basic Land') === false);
         const uncommonResult = cards.filter(card => card.rarity === 'uncommon');
         const rareResult = cards.filter(card => card.rarity === 'rare');
         const mythicResult = cards.filter(card => card.rarity === 'mythic');
+        const basicResult = cards.filter(card => card.type_line.includes('Basic Land') === true);
 
-        return { commonResult, uncommonResult, rareResult, mythicResult };
+        return { commonResult, uncommonResult, rareResult, mythicResult, basicResult };
     }
 
     const [booster, setBooster] = useState([])
     useEffect(() => {
         if (cards.length > 0) {
             const sortedCards = sortCards(cards);
-            const { commonResult, uncommonResult, rareResult, mythicResult } = sortedCards;
-            const fullPack = generateBooster({ commonResult, uncommonResult, rareResult, mythicResult })
+            const { commonResult, uncommonResult, rareResult, mythicResult, basicResult } = sortedCards;
+            const fullPack = generateBooster({ commonResult, uncommonResult, rareResult, mythicResult, basicResult })
             setBooster(fullPack)
         }
     }, [cards])
 
+    const refreshPage = () => {
+        const sortedCards = sortCards(cards);
+        const { commonResult, uncommonResult, rareResult, mythicResult, basicResult } = sortedCards;
+        const fullPack = generateBooster({ commonResult, uncommonResult, rareResult, mythicResult, basicResult })
+        setBooster(fullPack)
+    }
 
 
-    const generateBooster = ({ commonResult, uncommonResult, rareResult, mythicResult }) => {
+    const generateBooster = ({ commonResult, uncommonResult, rareResult, mythicResult, basicResult }) => {
         let fullPack = [];
         for (let i = 0; i < 10; i++) {
             const value = Math.floor(Math.random() * commonResult.length) + 1;
             // console.log(value);
             fullPack = [...fullPack, commonResult[value]];
+            commonResult.splice(value, 1);
         }
         for (let i = 0; i < 3; i++) {
             const value = Math.floor(Math.random() * uncommonResult.length) + 1;
             fullPack = [...fullPack, uncommonResult[value]];
+            uncommonResult.splice(value, 1);
         }
-        const value = Math.floor(Math.random() * rareResult.length) + 1;
-        fullPack = [...fullPack, rareResult[value]];
+        const mythicChance = Math.floor(Math.random() * 6) + 1;
+
+        if (mythicChance === 6) {
+            const value = Math.floor(Math.random() * mythicResult.length) + 1;
+            fullPack = [...fullPack, mythicResult[value]];
+        } else {
+            const value = Math.floor(Math.random() * rareResult.length) + 1;
+            fullPack = [...fullPack, rareResult[value]];
+        }
+        const value = Math.floor(Math.random() * basicResult.length) + 1;
+        fullPack = [...fullPack, basicResult[value]];
 
         console.log(fullPack);
         return fullPack;
@@ -86,6 +99,7 @@ export default function Booster() {
             return { faceOneUri: normal };
         }
     }
+
     const renderItem = ({ item }) => {
         const { faceOneUri, faceTwoUri } = getCardArtURI({ item });
         if (faceTwoUri) {
@@ -114,6 +128,12 @@ export default function Booster() {
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
             />
+            <TouchableOpacity
+                style={styles.touchable}
+                onPress={refreshPage}
+            >
+                <Text>Generate New Booster</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -130,8 +150,15 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 2
+    },
+    touchable: {
+        fontSize: 20,
+        paddingVertical: 8,
+        paddingHorizontal: 3,
+        borderWidth: 3,
+        borderColor: 'blue',
+        borderRadius: 7
     }
-
 
 });
 

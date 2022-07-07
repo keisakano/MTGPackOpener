@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput, SafeAreaView } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 const axios = require('axios');
@@ -16,15 +16,12 @@ const ResultsList = () => {
         const setsData = result.data.data;
         // ^^filter for values only with type === expansion || type === core
         const sR = setsData.filter(set => set.set_type === 'expansion' || set.set_type === 'core');
-        console.log(sR);
+        // console.log(sR);
         setCardSets(setsData);
         setSortedSets(sR);
-        // console.log(result)
     }
 
     const [cardSets, setCardSets] = useState([]);
-
-    const [searchWord, setSearchWord] = useState('');
 
     const [searchField, setSearchField] = useState('');
 
@@ -53,57 +50,56 @@ const ResultsList = () => {
     const names = sortedSets;
 
     const filteredSets = names.filter(set => {
-        console.log(set.name)
+        // console.log(set.name)
         return (
             set.name.toLowerCase().includes(searchField.toLowerCase())
         )
     })
-    console.log(filteredSets)
+    // console.log(filteredSets)
 
-    useEffect(() => {
-        console.log('prop', names)
-    }, [])
-
-
+    // useEffect(() => {
+    //     console.log('prop', names)
+    // }, [])
 
 
-    // const filteredSets = names.filter(set => {
-    //     console.log(set.name)
+
+    // const header = () => {
     //     return (
-    //         set.name.toLowerCase().includes(searchField.toLowerCase())
-    //     )
-    // })
-
-    const header = () => {
-        return (
-            <View style={styles.search}>
-                <TextInput
-                    placeholder="Search Sets"
-                    id="searchInput"
-                    onChange={handleChange}
-                // ^^figure out how to remove default styling when selected
-                ></TextInput>
-            </View>
-        );
-    };
+    //         <View style={styles.search}>
+    //             <TextInput
+    //                 placeholder="Search Sets"
+    //                 id="searchInput"
+    //                 onChange={handleChange}
+    //                 value={searchField}
+    //             // ^^figure out how to remove default styling when selected
+    //             ></TextInput>
+    //         </View>
+    //     );
+    // };
 
     return (
-        <FlatList
-            showsVerticalScrollIndicator={false}
-            ListHeaderComponent={header}
-            data={filteredSets}
-            renderItem={renderItem}
-            keyExtractor={item => item.code}
-        />
-
-    )
+        <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
+            <TextInput
+                style={styles.search}
+                placeholder="Search Sets"
+                id="searchInput"
+                onChange={handleChange}
+                value={searchField}
+            // ^^figure out how to remove default styling when selected
+            ></TextInput>
+            <FlatList
+                showsVerticalScrollIndicator={false}
+                data={filteredSets}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.code}
+            />
+        </SafeAreaView>
+    );
 
 }
 
 const styles = StyleSheet.create({
-    header: {
-        fontSize: 50, fontWeight: 'bold', textAlign: 'center'
-    },
+
     listItems: {
         fontSize: 20
     },
@@ -111,6 +107,7 @@ const styles = StyleSheet.create({
         marginVertical: 5
     },
     search: {
+        width: 200,
         borderWidth: 2,
         borderColor: 'black',
         paddingVertical: 5,
