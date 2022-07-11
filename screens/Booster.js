@@ -65,20 +65,22 @@ export default function Booster() {
 
     const generateBooster = ({ commonResult, uncommonResult, rareResult, mythicResult, basicResult }) => {
         let fullPack = [];
-        // let packPrice = 0;
+        let packPrice = [];
         for (let i = 0; i < 10; i++) {
             const value = Math?.floor(Math?.random() * commonResult.length);
             // console.log('commonResult.length: ', commonResult.length);
             let storedCommon = commonResult[value];
             fullPack = [...fullPack, storedCommon];
-            // packPrice = packPrice + parseInt(storedCommon.prices.usd);
+            console.log('storedCommon.prices.usd: ', storedCommon.prices.usd)
+            packPrice = [...packPrice, parseFloat(storedCommon.prices.usd)];
+            console.log('packPrice: ', packPrice)
             commonResult?.splice(value, 1);
         }
         for (let i = 0; i < 3; i++) {
             const value = Math?.floor(Math?.random() * uncommonResult.length);
             let storedUncommon = uncommonResult[value];
             fullPack = [...fullPack, storedUncommon];
-            // packPrice = packPrice + parseInt(storedUncommon.prices.usd);
+            packPrice = [...packPrice, parseFloat(storedUncommon.prices.usd)];
             uncommonResult?.splice(value, 1);
         }
         const mythicChance = Math?.floor(Math?.random() * 6);
@@ -88,12 +90,16 @@ export default function Booster() {
             const value = Math?.floor(Math?.random() * mythicResult.length);
             let storedMythic = mythicResult[value]
             fullPack = [...fullPack, storedMythic];
-            // packPrice = packPrice + parseInt(storedMythic.prices.usd);
+            console.log('storedMythic.prices.usd: ', storedMythic.prices.usd)
+            packPrice = [...packPrice, parseFloat(storedMythic.prices.usd)];
+            console.log('packPrice: ', packPrice)
         } else {
             const value = Math?.floor(Math?.random() * rareResult.length);
             let storedRare = rareResult[value];
             fullPack = [...fullPack, storedRare];
-            // packPrice = packPrice + parseInt(storedRare.prices.usd);
+            console.log('storedRare.prices.usd: ', storedRare.prices.usd)
+            packPrice = [...packPrice, parseFloat(storedRare.prices.usd)];
+            console.log('packPrice: ', packPrice)
         } if (basicResult.length >= 1) {
             const value = Math?.floor(Math?.random() * basicResult.length);
             let storedBasic = basicResult[value];
@@ -101,9 +107,12 @@ export default function Booster() {
         }
 
         // packPrice = packPrice + parseInt(storedBasic.prices.usd);
-
-        console.log(fullPack);
-        // console.log('packPrice: ', packPrice)
+        let packValue = 0;
+        for (let i = 0; i < packPrice.length; i++) {
+            packValue += packPrice[i]
+        }
+        // console.log(fullPack);
+        console.log('packValue: ', packValue)
         return fullPack;
     }
 
@@ -185,7 +194,7 @@ export default function Booster() {
 
     return (
         <View style={styles.booster}>
-            {/* <Text>{totalPrice}</Text> */}
+            <Text>{totalPrice}</Text>
             <TouchableOpacity
                 onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
                 style={styles.touchable}
