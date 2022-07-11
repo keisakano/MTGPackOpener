@@ -5,6 +5,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Booster from './screens/Booster';
 import ResultsList from './src/components/ResultsList';
+import SetDetails from './src/components/SetDetails';
 
 
 function HomeScreen() {
@@ -30,6 +31,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Booster" component={Booster} />
+        <Stack.Screen name="Set Details" component={SetDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );
