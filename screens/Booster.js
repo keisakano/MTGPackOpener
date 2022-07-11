@@ -7,9 +7,9 @@ const axios = require('axios');
 
 
 export default function Booster() {
-    const { params: { setName, setCode } } = useRoute();
+    const { params: { setName, setCode, cardCount, setBlock, scryfallUri } } = useRoute();
     const navigation = useNavigation();
-    const goToSetDetails = ({ setName, setCode }) => navigation.navigate('Set Details', { setName, setCode });
+    const goToSetDetails = ({ setName, setCode, cardCount, setBlock, scryfallUri }) => navigation.navigate('Set Details', { setName, setCode, cardCount, setBlock, scryfallUri });
 
     const renderCards = async () => {
         const fetchedSet = await axios.get(`https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3A${setCode}&unique=prints`);
@@ -34,16 +34,17 @@ export default function Booster() {
     }, [])
 
     const sortCards = (cards) => {
-        const commonResult = cards?.filter(card => card.rarity === 'common' && card.type_line.includes('Basic Land') === false);
-        const uncommonResult = cards?.filter(card => card.rarity === 'uncommon');
-        const rareResult = cards?.filter(card => card.rarity === 'rare');
-        const mythicResult = cards?.filter(card => card.rarity === 'mythic');
-        const basicResult = cards?.filter(card => card.type_line.includes('Basic Land') === true);
+        const commonResult = cards?.filter(card => card.rarity === 'common' && card.type_line.includes('Basic Land') === false && card.booster === true);
+        const uncommonResult = cards?.filter(card => card.rarity === 'uncommon' && card.booster === true);
+        const rareResult = cards?.filter(card => card.rarity === 'rare' && card.booster === true);
+        const mythicResult = cards?.filter(card => card.rarity === 'mythic' && card.booster === true);
+        const basicResult = cards?.filter(card => card.type_line?.includes('Basic Land') === true);
 
         return { commonResult, uncommonResult, rareResult, mythicResult, basicResult };
     }
 
-    const [booster, setBooster] = useState([])
+    const [booster, setBooster] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
     useEffect(() => {
         if (cards.length > 0) {
             const sortedCards = sortCards(cards);
@@ -58,23 +59,26 @@ export default function Booster() {
         const { commonResult, uncommonResult, rareResult, mythicResult, basicResult } = sortedCards;
         const fullPack = generateBooster({ commonResult, uncommonResult, rareResult, mythicResult, basicResult })
         setBooster(fullPack)
+        // setTotalPrice(packPrice);
     }
 
 
     const generateBooster = ({ commonResult, uncommonResult, rareResult, mythicResult, basicResult }) => {
         let fullPack = [];
+        // let packPrice = 0;
         for (let i = 0; i < 10; i++) {
             const value = Math?.floor(Math?.random() * commonResult.length);
             // console.log('commonResult.length: ', commonResult.length);
             let storedCommon = commonResult[value];
             fullPack = [...fullPack, storedCommon];
-            // console.log('storedCommon: ', storedCommon)
-            // console.log('value: ', value)
+            // packPrice = packPrice + parseInt(storedCommon.prices.usd);
             commonResult?.splice(value, 1);
         }
         for (let i = 0; i < 3; i++) {
             const value = Math?.floor(Math?.random() * uncommonResult.length);
-            fullPack = [...fullPack, uncommonResult[value]];
+            let storedUncommon = uncommonResult[value];
+            fullPack = [...fullPack, storedUncommon];
+            // packPrice = packPrice + parseInt(storedUncommon.prices.usd);
             uncommonResult?.splice(value, 1);
         }
         const mythicChance = Math?.floor(Math?.random() * 6);
@@ -82,15 +86,24 @@ export default function Booster() {
 
         if (mythicChance === 5) {
             const value = Math?.floor(Math?.random() * mythicResult.length);
-            fullPack = [...fullPack, mythicResult[value]];
+            let storedMythic = mythicResult[value]
+            fullPack = [...fullPack, storedMythic];
+            // packPrice = packPrice + parseInt(storedMythic.prices.usd);
         } else {
             const value = Math?.floor(Math?.random() * rareResult.length);
-            fullPack = [...fullPack, rareResult[value]];
+            let storedRare = rareResult[value];
+            fullPack = [...fullPack, storedRare];
+            // packPrice = packPrice + parseInt(storedRare.prices.usd);
+        } if (basicResult.length >= 1) {
+            const value = Math?.floor(Math?.random() * basicResult.length);
+            let storedBasic = basicResult[value];
+            fullPack = [...fullPack, storedBasic];
         }
-        const value = Math?.floor(Math?.random() * basicResult.length);
-        fullPack = [...fullPack, basicResult[value]];
+
+        // packPrice = packPrice + parseInt(storedBasic.prices.usd);
 
         console.log(fullPack);
+        // console.log('packPrice: ', packPrice)
         return fullPack;
     }
 
@@ -111,39 +124,42 @@ export default function Booster() {
 
     const renderItem = ({ item }) => {
         const { faceOneUri, faceTwoUri } = getCardArtURI({ item });
-        if (faceTwoUri) {
+        if (faceTwoUri && item.rarity === 'rare') {
+
+            return (
+                <View style={styles.container}>
+                    <Text style={styles.rare}>{item.name}</Text>
+                    <Text>Price: ${item.prices.usd}</Text>
+                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
+                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
+                </View>
+            )
+        }
+        if (faceTwoUri && item.rarity === 'mythic') {
+            return (
+                <View style={styles.container}>
+                    <Text style={styles.mythic}>{item.name}</Text>
+                    <Text>Price: ${item.prices.usd}</Text>
+                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
+                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
+                </View>
+            )
+        } else if (faceTwoUri) {
+            return (
+                <View style={styles.container}>
+                    <Text style={styles.text}>{item.name}</Text>
+                    <Text>Price: ${item.prices.usd}</Text>
+                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
+                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
+                </View>
+            )
+        }
+        else {
             if (item.rarity === 'rare') {
                 return (
                     <View style={styles.container}>
                         <Text style={styles.rare}>{item.name}</Text>
-                        <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
-                        <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
-                    </View>
-                )
-            }
-            if (item.rarity === 'mythic') {
-                return (
-                    <View style={styles.container}>
-                        <Text style={styles.mythic}>{item.name}</Text>
-                        <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
-                        <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
-                    </View>
-                )
-            }
-            if (item.rarity === 'common' || item.rarity === 'uncommon') {
-                return (
-                    <View style={styles.container}>
-                        <Text style={styles.rare}>{item.name}</Text>
-                        <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
-                        <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
-                    </View>
-                )
-            }
-        } else {
-            if (item.rarity === 'rare') {
-                return (
-                    <View style={styles.container}>
-                        <Text style={styles.rare}>{item.name}</Text>
+                        <Text>Price: ${item.prices.usd}</Text>
                         <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
                     </View>
                 )
@@ -151,6 +167,7 @@ export default function Booster() {
                 return (
                     <View style={styles.container}>
                         <Text style={styles.mythic}>{item.name}</Text>
+                        <Text>Price: ${item.prices.usd}</Text>
                         <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
                     </View>
                 )
@@ -158,6 +175,7 @@ export default function Booster() {
                 return (
                     <View style={styles.container}>
                         <Text style={styles.text}>{item.name}</Text>
+                        <Text>Price: ${item.prices.usd}</Text>
                         <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
                     </View>
                 )
@@ -167,8 +185,10 @@ export default function Booster() {
 
     return (
         <View style={styles.booster}>
+            {/* <Text>{totalPrice}</Text> */}
             <TouchableOpacity
-                onPress={() => goToSetDetails({ setName, setCode })}
+                onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
+                style={styles.touchable}
             >
                 <Text>Go to set details</Text>
             </TouchableOpacity>

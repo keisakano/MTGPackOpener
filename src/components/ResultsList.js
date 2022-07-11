@@ -7,12 +7,12 @@ const axios = require('axios');
 
 const ResultsList = () => {
     const navigation = useNavigation();
-    const goToBooster = ({ setName, setCode }) => navigation.navigate('Booster', { setName, setCode });
+    const goToBooster = ({ setName, setCode, cardCount, setBlock, scryfallUri }) => navigation.navigate('Booster', { setName, setCode, cardCount, setBlock, scryfallUri });
 
     const hitAPI = async function () {
         const result = await axios.get('https://api.scryfall.com/sets');
         const setsData = result.data.data;
-        const sR = setsData.filter(set => set.set_type === 'expansion' || set.set_type === 'core');
+        const sR = setsData.filter(set => set.set_type === 'expansion' || set.set_type === 'core' || set.set_type === 'masters' && set.digital === false);
         setCardSets(setsData);
         // console.log(sR)
         setSortedSets(sR);
@@ -30,11 +30,11 @@ const ResultsList = () => {
     }, [])
 
     const renderItem = ({ item }) => {
-        const { name: setName, code: setCode, icon_svg_uri: setImg } = item;
+        const { name: setName, code: setCode, icon_svg_uri: setImg, card_count: cardCount, block: setBlock, srcyfall_uri: scryfallUri } = item;
         return (
             <TouchableOpacity
                 style={styles.touchables}
-                onPress={() => goToBooster({ setName, setCode })}>
+                onPress={() => goToBooster({ setName, setCode, cardCount, setBlock, scryfallUri })}>
                 <Text style={styles.listItems}>
                     <Image
                         source={setImg}
