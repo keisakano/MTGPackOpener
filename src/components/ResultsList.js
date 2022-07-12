@@ -12,7 +12,7 @@ const ResultsList = () => {
     const hitAPI = async function () {
         const result = await axios.get('https://api.scryfall.com/sets');
         const setsData = result.data.data;
-        const sR = setsData.filter(set => set.set_type === 'expansion' || set.set_type === 'core' || set.set_type === 'masters' && set.digital === false);
+        const sR = setsData.filter(set => set.set_type === 'expansion' || set.set_type === 'core' || set.set_type === 'masters' && set.digital === false && set.name !== 'Universes Within' && set.name !== 'Mystery Booster Retail Edition Foils' && set.code !== 'tsb');
         setCardSets(setsData);
         // console.log(sR)
         setSortedSets(sR);

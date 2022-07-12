@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, Linking, SafeAreaView } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/core';
 
 const axios = require('axios');
 
-
+// Lorwyn and Eldritch Moon are a little buggy, eldritch because of two piece cards
+// Running into error with older sets where prices aren't available for some cards which throws error when trying to display prices
 export default function Booster() {
     const { params: { setName, setCode, cardCount, setBlock, scryfallUri } } = useRoute();
     const navigation = useNavigation();
@@ -104,6 +105,7 @@ export default function Booster() {
             const value = Math?.floor(Math?.random() * basicResult.length);
             let storedBasic = basicResult[value];
             fullPack = [...fullPack, storedBasic];
+            packPrice = [...packPrice, parseFloat(storedBasic.prices.usd)];
         }
 
         // packPrice = packPrice + parseInt(storedBasic.prices.usd);
@@ -137,56 +139,80 @@ export default function Booster() {
         if (faceTwoUri && item.rarity === 'rare') {
 
             return (
-                <View style={styles.container}>
-                    <Text style={styles.rare}>{item.name}</Text>
-                    <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
-                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
+                <View style={styles.booster}>
+                    <TouchableOpacity
+                        onPress={() => Linking.openURL(item.scryfall_uri)}
+                    >
+                        <Text style={styles.rare}>{item.name}</Text>
+                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceOneUri }} />
+                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceTwoUri }} />
+                    </TouchableOpacity>
                 </View>
             )
         }
         if (faceTwoUri && item.rarity === 'mythic') {
             return (
-                <View style={styles.container}>
-                    <Text style={styles.mythic}>{item.name}</Text>
-                    <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
-                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
+                <View style={styles.booster}>
+                    <TouchableOpacity
+                        onPress={() => Linking.openURL(item.scryfall_uri)}
+                    >
+                        <Text style={styles.mythic}>{item.name}</Text>
+                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceOneUri }} />
+                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceTwoUri }} />
+                    </TouchableOpacity>
                 </View>
             )
         } else if (faceTwoUri) {
             return (
-                <View style={styles.container}>
-                    <Text style={styles.text}>{item.name}</Text>
-                    <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
-                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
+                <View style={styles.booster}>
+                    <TouchableOpacity
+                        onPress={() => Linking.openURL(item.scryfall_uri)}
+                    >
+                        <Text style={styles.text}>{item.name}</Text>
+                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceOneUri }} />
+                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceTwoUri }} />
+                    </TouchableOpacity>
                 </View>
             )
         }
         else {
             if (item.rarity === 'rare') {
                 return (
-                    <View style={styles.container}>
-                        <Text style={styles.rare}>{item.name}</Text>
-                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                        <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
+                    <View style={styles.booster}>
+                        <TouchableOpacity
+                            onPress={() => Linking.openURL(item.scryfall_uri)}
+                        >
+                            <Text style={styles.rare}>{item.name}</Text>
+                            <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+                            <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
+                        </TouchableOpacity>
                     </View>
                 )
             } if (item.rarity === 'mythic') {
                 return (
-                    <View style={styles.container}>
-                        <Text style={styles.mythic}>{item.name}</Text>
-                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                        <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
+                    <View style={styles.booster}>
+                        <TouchableOpacity
+                            onPress={() => Linking.openURL(item.scryfall_uri)}
+                        >
+                            <Text style={styles.mythic}>{item.name}</Text>
+                            <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+                            <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
+                        </TouchableOpacity>
                     </View>
                 )
             } else {
                 return (
-                    <View style={styles.container}>
-                        <Text style={styles.text}>{item.name}</Text>
-                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                        <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
+                    <View style={styles.booster}>
+                        <TouchableOpacity
+                            onPress={() => Linking.openURL(item.scryfall_uri)}
+                        >
+                            <Text style={styles.text}>{item.name}</Text>
+                            <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+                            <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
+                        </TouchableOpacity>
                     </View>
                 )
             }
@@ -194,7 +220,7 @@ export default function Booster() {
     };
 
     return (
-        <View style={styles.booster}>
+        <SafeAreaView style={styles.container}>
             <TouchableOpacity
                 onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
                 style={styles.touchable}
@@ -214,17 +240,25 @@ export default function Booster() {
             >
                 <Text>Generate New Booster</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     booster: {
-        flex: 1, alignItems: 'center', textAlign: 'center', justifyContent: 'center'
+        display: 'flex',
+        placeItems: 'center',
+        placeContent: 'center',
+        textAlign: 'center',
+        border: '2px solid red',
+        width: '50vw',
+        paddingVertical: 3,
+        marginVertical: 5,
     },
     container: {
-        paddingVertical: 3,
-        marginVertical: 5
+        flex: 1,
+        placeItems: 'center',
+        border: '1px solid rebeccapurple'
     },
     text: {
         fontSize: 20,
