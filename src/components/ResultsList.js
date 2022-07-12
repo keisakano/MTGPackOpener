@@ -30,7 +30,7 @@ const ResultsList = () => {
     }, [])
 
     const renderItem = ({ item }) => {
-        const { name: setName, code: setCode, icon_svg_uri: setImg, card_count: cardCount, block: setBlock, srcyfall_uri: scryfallUri } = item;
+        const { name: setName, code: setCode, icon_svg_uri: setImg, card_count: cardCount, block: setBlock, scryfall_uri: scryfallUri } = item;
         return (
             <TouchableOpacity
                 style={styles.touchables}

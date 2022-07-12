@@ -10,7 +10,6 @@ export default function Booster() {
     const { params: { setName, setCode, cardCount, setBlock, scryfallUri } } = useRoute();
     const navigation = useNavigation();
     const goToSetDetails = ({ setName, setCode, cardCount, setBlock, scryfallUri }) => navigation.navigate('Set Details', { setName, setCode, cardCount, setBlock, scryfallUri });
-
     const renderCards = async () => {
         const fetchedSet = await axios.get(`https://api.scryfall.com/cards/search?include_extras=true&include_variations=true&order=set&q=e%3A${setCode}&unique=prints`);
         const allCardsData = fetchedSet.data
@@ -50,7 +49,8 @@ export default function Booster() {
             const sortedCards = sortCards(cards);
             const { commonResult, uncommonResult, rareResult, mythicResult, basicResult } = sortedCards;
             const fullPack = generateBooster({ commonResult, uncommonResult, rareResult, mythicResult, basicResult })
-            setBooster(fullPack)
+            setBooster(fullPack.fullPack)
+            setTotalPrice(fullPack.packValue)
         }
     }, [cards])
 
@@ -58,8 +58,8 @@ export default function Booster() {
         const sortedCards = sortCards(cards);
         const { commonResult, uncommonResult, rareResult, mythicResult, basicResult } = sortedCards;
         const fullPack = generateBooster({ commonResult, uncommonResult, rareResult, mythicResult, basicResult })
-        setBooster(fullPack)
-        // setTotalPrice(packPrice);
+        setBooster(fullPack.fullPack)
+        setTotalPrice(fullPack.packValue);
     }
 
 
@@ -111,9 +111,10 @@ export default function Booster() {
         for (let i = 0; i < packPrice.length; i++) {
             packValue += packPrice[i]
         }
-        // console.log(fullPack);
+        packValue = packValue.toFixed(2);
+        console.log(fullPack);
         console.log('packValue: ', packValue)
-        return fullPack;
+        return { fullPack, packValue };
     }
 
 
@@ -138,7 +139,7 @@ export default function Booster() {
             return (
                 <View style={styles.container}>
                     <Text style={styles.rare}>{item.name}</Text>
-                    <Text>Price: ${item.prices.usd}</Text>
+                    <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                     <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
                     <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
                 </View>
@@ -148,7 +149,7 @@ export default function Booster() {
             return (
                 <View style={styles.container}>
                     <Text style={styles.mythic}>{item.name}</Text>
-                    <Text>Price: ${item.prices.usd}</Text>
+                    <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                     <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
                     <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
                 </View>
@@ -157,7 +158,7 @@ export default function Booster() {
             return (
                 <View style={styles.container}>
                     <Text style={styles.text}>{item.name}</Text>
-                    <Text>Price: ${item.prices.usd}</Text>
+                    <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                     <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
                     <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
                 </View>
@@ -168,7 +169,7 @@ export default function Booster() {
                 return (
                     <View style={styles.container}>
                         <Text style={styles.rare}>{item.name}</Text>
-                        <Text>Price: ${item.prices.usd}</Text>
+                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                         <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
                     </View>
                 )
@@ -176,7 +177,7 @@ export default function Booster() {
                 return (
                     <View style={styles.container}>
                         <Text style={styles.mythic}>{item.name}</Text>
-                        <Text>Price: ${item.prices.usd}</Text>
+                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                         <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
                     </View>
                 )
@@ -184,7 +185,7 @@ export default function Booster() {
                 return (
                     <View style={styles.container}>
                         <Text style={styles.text}>{item.name}</Text>
-                        <Text>Price: ${item.prices.usd}</Text>
+                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                         <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
                     </View>
                 )
@@ -194,13 +195,13 @@ export default function Booster() {
 
     return (
         <View style={styles.booster}>
-            <Text>{totalPrice}</Text>
             <TouchableOpacity
                 onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
                 style={styles.touchable}
             >
                 <Text>Go to set details</Text>
             </TouchableOpacity>
+            <Text style={styles.totalPrice}>Total pack value: {totalPrice}</Text>
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={booster}
@@ -249,6 +250,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 2,
         color: '#a61903'
+    },
+    price: {
+        marginBottom: 2
+    },
+    totalPrice: {
+        marginBottom: 8,
+        marginTop: 6,
+        borderBottomWidth: 2,
+        borderBottomColor: 'black'
     }
 
 });

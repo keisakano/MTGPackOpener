@@ -1,21 +1,22 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, Touchable } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, Touchable, Linking } from 'react-native';
 import { useRoute } from '@react-navigation/core';
 
 const axios = require('axios');
 
 export default function setDetails() {
     const { params: { setName, setCode, cardCount, setBlock, scryfallUri } } = useRoute();
+    console.log('scryfallUri: ', scryfallUri)
     if (setBlock) {
         return (
             <View style={styles.container}>
                 <Text style={styles.setName}>{setName}</Text>
-                <Text>Card Count: {cardCount}</Text>
-                <Text>Block: {setBlock}</Text>
+                <Text style={styles.items}>Card Count: {cardCount}</Text>
+                <Text style={styles.items}>Block: {setBlock}</Text>
                 <TouchableOpacity
-                    onPress={() => scryfallUri}
+                    onPress={() => Linking.openURL(scryfallUri)}
                 >
-                    <Text>View set on Scryfall</Text>
+                    <Text style={styles.url}>View set on Scryfall</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -23,12 +24,12 @@ export default function setDetails() {
         return (
             <View style={styles.container}>
                 <Text style={styles.setName}>{setName}</Text>
-                <Text>Card Count: {cardCount}</Text>
-                <Text>Block: n/a </Text>
+                <Text style={styles.items}>Card Count: {cardCount}</Text>
+                <Text style={styles.items}>Block: n/a </Text>
                 <TouchableOpacity
-                    onPress={() => scryfallUri}
+                    onPress={() => Linking.openURL(scryfallUri)}
                 >
-                    <Text>View set on Scryfall</Text>
+                    <Text style={styles.url}>View set on Scryfall</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -43,6 +44,14 @@ const styles = StyleSheet.create({
     },
     setName: {
         fontSize: 20,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginVertical: 4
+    },
+    url: {
+        color: 'blue',
+        marginVertical: 4
+    },
+    items: {
+        marginVertical: 4
     }
 })
