@@ -137,17 +137,17 @@ export default function Booster() {
         if (faceTwoUri && item.rarity === 'rare') {
 
             return (
-                <View style={styles.container}>
+                <View style={styles.booster}>
                     <Text style={styles.rare}>{item.name}</Text>
                     <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
-                    <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceTwoUri }} />
+                    <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
+                    <Image style={{ height: 300, width: 225 }} source={{ uri: faceTwoUri }} />
                 </View>
             )
         }
         if (faceTwoUri && item.rarity === 'mythic') {
             return (
-                <View style={styles.container}>
+                <View style={styles.booster}>
                     <Text style={styles.mythic}>{item.name}</Text>
                     <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                     <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
@@ -156,7 +156,7 @@ export default function Booster() {
             )
         } else if (faceTwoUri) {
             return (
-                <View style={styles.container}>
+                <View style={styles.booster}>
                     <Text style={styles.text}>{item.name}</Text>
                     <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                     <Image style={{ height: 300, width: 225, display: 'inline' }} source={{ uri: faceOneUri }} />
@@ -167,7 +167,7 @@ export default function Booster() {
         else {
             if (item.rarity === 'rare') {
                 return (
-                    <View style={styles.container}>
+                    <View style={styles.booster}>
                         <Text style={styles.rare}>{item.name}</Text>
                         <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                         <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
@@ -175,7 +175,7 @@ export default function Booster() {
                 )
             } if (item.rarity === 'mythic') {
                 return (
-                    <View style={styles.container}>
+                    <View style={styles.booster}>
                         <Text style={styles.mythic}>{item.name}</Text>
                         <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                         <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
@@ -183,7 +183,7 @@ export default function Booster() {
                 )
             } else {
                 return (
-                    <View style={styles.container}>
+                    <View style={styles.booster}>
                         <Text style={styles.text}>{item.name}</Text>
                         <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                         <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
@@ -194,7 +194,7 @@ export default function Booster() {
     };
 
     return (
-        <View style={styles.booster}>
+        <View style={styles.container}>
             <TouchableOpacity
                 onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
                 style={styles.touchable}
@@ -219,12 +219,19 @@ export default function Booster() {
 }
 
 const styles = StyleSheet.create({
-    booster: {
-        flex: 1, alignItems: 'center', textAlign: 'center', justifyContent: 'center'
-    },
     container: {
+        flex: 1,
+        placeItems: 'center',
+    },
+    booster: {
+        display: 'flex',
+        placeItems: 'center',
+        placeContent: 'center',
+        width: '50vw',
         paddingVertical: 3,
-        marginVertical: 5
+        marginVertical: 5,
+        border: '1px solid red',
+
     },
     text: {
         fontSize: 20,
