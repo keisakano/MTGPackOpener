@@ -72,40 +72,33 @@ export default function Booster() {
             // console.log('commonResult.length: ', commonResult.length);
             let storedCommon = commonResult[value];
             fullPack = [...fullPack, storedCommon];
-            console.log('storedCommon.prices.usd: ', storedCommon.prices.usd)
-            packPrice = [...packPrice, parseFloat(storedCommon.prices.usd)];
-            console.log('packPrice: ', packPrice)
+            packPrice = [...packPrice, parseFloat(storedCommon?.prices.usd ?? 0.0)];
             commonResult?.splice(value, 1);
         }
         for (let i = 0; i < 3; i++) {
             const value = Math?.floor(Math?.random() * uncommonResult.length);
             let storedUncommon = uncommonResult[value];
             fullPack = [...fullPack, storedUncommon];
-            packPrice = [...packPrice, parseFloat(storedUncommon.prices.usd)];
+            packPrice = [...packPrice, parseFloat(storedUncommon?.prices.usd ?? 0.0)];
             uncommonResult?.splice(value, 1);
         }
         const mythicChance = Math?.floor(Math?.random() * 6);
-        console.log('mythicChance: ', mythicChance)
 
         if (mythicChance === 5) {
             const value = Math?.floor(Math?.random() * mythicResult.length);
             let storedMythic = mythicResult[value]
             fullPack = [...fullPack, storedMythic];
-            console.log('storedMythic.prices.usd: ', storedMythic.prices.usd)
-            packPrice = [...packPrice, parseFloat(storedMythic.prices.usd)];
-            console.log('packPrice: ', packPrice)
+            packPrice = [...packPrice, parseFloat(storedMythic?.prices.usd ?? 0.0)];
         } else {
             const value = Math?.floor(Math?.random() * rareResult.length);
             let storedRare = rareResult[value];
             fullPack = [...fullPack, storedRare];
-            console.log('storedRare.prices.usd: ', storedRare.prices.usd)
-            packPrice = [...packPrice, parseFloat(storedRare.prices.usd)];
-            console.log('packPrice: ', packPrice)
+            packPrice = [...packPrice, parseFloat(storedRare?.prices.usd ?? 0.0)];
         } if (basicResult.length >= 1) {
             const value = Math?.floor(Math?.random() * basicResult.length);
             let storedBasic = basicResult[value];
             fullPack = [...fullPack, storedBasic];
-            packPrice = [...packPrice, parseFloat(storedBasic.prices.usd)];
+            packPrice = [...packPrice, parseFloat(storedBasic?.prices.usd ?? 0.0)];
         }
 
         // packPrice = packPrice + parseInt(storedBasic.prices.usd);
@@ -134,88 +127,53 @@ export default function Booster() {
         }
     }
 
-    const renderItem = ({ item }) => {
-        const { faceOneUri, faceTwoUri } = getCardArtURI({ item });
-        if (faceTwoUri && item.rarity === 'rare') {
+    const getTitleStyle = (rarity = '') => {
+        const titleColor = rarity === 'rare' ? '#ad7f45' : rarity === 'mythic' ? '#a61903' : 'black';
+        const titleStyle = { ...StyleSheet.flatten(styles.titleText), color: titleColor };
 
+        return titleStyle;
+    }
+
+    const renderItem = ({ item }) => {
+        const titleStyle = getTitleStyle(item?.rarity);
+        const { faceOneUri, faceTwoUri } = getCardArtURI({ item });
+
+
+        // ^^turn conditional styling into tunrary styling
+        if (faceTwoUri) {
             return (
                 <View style={styles.booster}>
                     <TouchableOpacity
                         onPress={() => Linking.openURL(item.scryfall_uri)}
+                        style={styles.booster}
                     >
-                        <Text style={styles.rare}>{item.name}</Text>
+                        <Text style={titleStyle}>{item.name}</Text>
                         <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceOneUri }} />
-                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceTwoUri }} />
-                    </TouchableOpacity>
-                </View>
-            )
-        }
-        if (faceTwoUri && item.rarity === 'mythic') {
-            return (
-                <View style={styles.booster}>
-                    <TouchableOpacity
-                        onPress={() => Linking.openURL(item.scryfall_uri)}
-                    >
-                        <Text style={styles.mythic}>{item.name}</Text>
-                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceOneUri }} />
-                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceTwoUri }} />
-                    </TouchableOpacity>
-                </View>
-            )
-        } else if (faceTwoUri) {
-            return (
-                <View style={styles.booster}>
-                    <TouchableOpacity
-                        onPress={() => Linking.openURL(item.scryfall_uri)}
-                    >
-                        <Text style={styles.text}>{item.name}</Text>
-                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceOneUri }} />
-                        <Image style={{ height: 300, width: 225, }} source={{ uri: faceTwoUri }} />
+                        <View
+                            style={{ flexDirection: 'row' }}
+                        >
+                            <Image style={{ height: 300, width: 225, marginRight: 10 }} source={{ uri: faceOneUri }} />
+                            <Image style={{ height: 300, width: 225, }} source={{ uri: faceTwoUri }} />
+                        </View>
+
                     </TouchableOpacity>
                 </View>
             )
         }
         else {
-            if (item.rarity === 'rare') {
-                return (
-                    <View style={styles.booster}>
-                        <TouchableOpacity
-                            onPress={() => Linking.openURL(item.scryfall_uri)}
-                        >
-                            <Text style={styles.rare}>{item.name}</Text>
-                            <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                            <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
-                        </TouchableOpacity>
-                    </View>
-                )
-            } if (item.rarity === 'mythic') {
-                return (
-                    <View style={styles.booster}>
-                        <TouchableOpacity
-                            onPress={() => Linking.openURL(item.scryfall_uri)}
-                        >
-                            <Text style={styles.mythic}>{item.name}</Text>
-                            <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                            <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
-                        </TouchableOpacity>
-                    </View>
-                )
-            } else {
-                return (
-                    <View style={styles.booster}>
-                        <TouchableOpacity
-                            onPress={() => Linking.openURL(item.scryfall_uri)}
-                        >
-                            <Text style={styles.text}>{item.name}</Text>
-                            <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                            <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
-                        </TouchableOpacity>
-                    </View>
-                )
-            }
+            return (
+                <View style={styles.booster}>
+                    <TouchableOpacity
+                        onPress={() => Linking.openURL(item.scryfall_uri)}
+                        style={styles.booster}
+                    >
+                        <Text style={titleStyle}>{item.name}</Text>
+                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+                        <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
+                    </TouchableOpacity>
+                </View>
+            )
+
         }
     };
 
@@ -233,6 +191,7 @@ export default function Booster() {
                 data={booster}
                 renderItem={renderItem}
                 keyExtractor={item => item?.id}
+                numColumns={3}
             />
             <TouchableOpacity
                 style={styles.touchable}
@@ -250,8 +209,7 @@ const styles = StyleSheet.create({
         placeItems: 'center',
         placeContent: 'center',
         textAlign: 'center',
-        border: '2px solid red',
-        width: '50vw',
+        width: '33%',
         paddingVertical: 3,
         marginVertical: 5,
     },
@@ -260,7 +218,7 @@ const styles = StyleSheet.create({
         placeItems: 'center',
         border: '1px solid rebeccapurple'
     },
-    text: {
+    titleText: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 2
@@ -273,16 +231,12 @@ const styles = StyleSheet.create({
         borderColor: 'blue',
         borderRadius: 7
     },
-    rare: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 2,
+    rareTitleColor: {
+
         color: '#ad7f45'
     },
-    mythic: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 2,
+    mythicTitleColor: {
+
         color: '#a61903'
     },
     price: {
