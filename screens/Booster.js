@@ -148,13 +148,15 @@ export default function Booster() {
     );
 }
 const BoosterCard = ({ item }) => {
+    const [flipFace, setFlipFace] = useState(false);
 
     const getCardArtURI = ({ item }) => {
         const hasTwoFaces = item?.card_faces?.[0].image_uris
         const hasCardFaces = item?.card_faces;
 
         if (hasTwoFaces) {
-            const { 0: { image_uris: { normal: faceOneUri = '' } = {} } = {}, 1: { image_uris: { normal: faceTwoUri = '' } = {} } = {} } = hasCardFaces;
+            const { 0: { image_uris: { normal: faceOneUri = '' } = {} } = {},
+                1: { image_uris: { normal: faceTwoUri = '' } = {} } = {} } = hasCardFaces;
             return { faceOneUri, faceTwoUri };
         } else {
             const { image_uris } = item;
@@ -171,8 +173,7 @@ const BoosterCard = ({ item }) => {
     }
     const titleStyle = getTitleStyle(item?.rarity);
     const { faceOneUri, faceTwoUri } = getCardArtURI({ item });
-    let flippedFace = false;
-    console.log('flippedFace: ', flippedFace);
+
 
     if (faceTwoUri) {
         return (
@@ -181,21 +182,19 @@ const BoosterCard = ({ item }) => {
                     onPress={() => Linking.openURL(item.scryfall_uri)}
                     style={styles.booster}
                 >
-                    <Text style={titleStyle}>{flippedFace === true ? item.card_faces[1].name : item.card_faces[0].name}</Text>
+                    <Text style={titleStyle}>{flipFace === true ? item.card_faces[1].name : item.card_faces[0].name}</Text>
                     <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                 </TouchableOpacity>
                 <View
                     style={styles.booster}
                 >
-                    <Image style={{ height: 300, width: 225 }} source={flippedFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
-                    <TouchableOpacity
-                        onPress={() => flippedFace === false ? flippedFace = true : flippedFace = false}
-                    >
-                        <Text>Flip Me</Text>
-                    </TouchableOpacity>
+                    <Image style={{ height: 300, width: 225 }} source={flipFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
                 </View>
-
-
+                <TouchableOpacity
+                    onPress={() => flipFace === false ? setFlipFace(true) : setFlipFace(false)}
+                >
+                    <Text>Flip Me</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -227,7 +226,7 @@ const styles = StyleSheet.create({
         width: '33%',
         paddingVertical: 3,
         marginVertical: 5,
-        marginHorizontal: 5
+        marginHorizontal: 4
     },
     container: {
         flex: 1,
