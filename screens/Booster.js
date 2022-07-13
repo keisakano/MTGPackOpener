@@ -45,6 +45,8 @@ export default function Booster() {
 
     const [booster, setBooster] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
+    const [flipFace, setFlipFace] = useState(false);
+
     useEffect(() => {
         if (cards.length > 0) {
             const sortedCards = sortCards(cards);
@@ -147,16 +149,21 @@ export default function Booster() {
                         onPress={() => Linking.openURL(item.scryfall_uri)}
                         style={styles.booster}
                     >
-                        <Text style={titleStyle}>{item.name}</Text>
+                        <Text style={titleStyle}>{flipFace === true ? item.card_faces[1].name : item.card_faces[0].name}</Text>
                         <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                        <View
-                            style={{ flexDirection: 'row' }}
-                        >
-                            <Image style={{ height: 300, width: 225, marginRight: 10 }} source={{ uri: faceOneUri }} />
-                            <Image style={{ height: 300, width: 225, }} source={{ uri: faceTwoUri }} />
-                        </View>
-
                     </TouchableOpacity>
+                    <View
+                        style={styles.booster}
+                    >
+                        <Image style={{ height: 300, width: 225 }} source={flipFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
+                        <TouchableOpacity
+                            onPress={() => flipFace === false ? setFlipFace(true) : setFlipFace(false)}
+                        >
+                            <Text>Flip Me</Text>
+                        </TouchableOpacity>
+                    </View>
+
+
                 </View>
             )
         }
@@ -169,8 +176,9 @@ export default function Booster() {
                     >
                         <Text style={titleStyle}>{item.name}</Text>
                         <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                        <Image style={{ height: 300, width: 225 }} source={{ uri: faceOneUri }} />
                     </TouchableOpacity>
+                    <Image style={styles.image} source={{ uri: faceOneUri }} />
+
                 </View>
             )
 
@@ -212,6 +220,7 @@ const styles = StyleSheet.create({
         width: '33%',
         paddingVertical: 3,
         marginVertical: 5,
+        marginHorizontal: 5
     },
     container: {
         flex: 1,
@@ -221,7 +230,8 @@ const styles = StyleSheet.create({
     titleText: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 2
+        marginBottom: 2,
+        width: '350%'
     },
     touchable: {
         fontSize: 20,
@@ -247,6 +257,18 @@ const styles = StyleSheet.create({
         marginTop: 6,
         borderBottomWidth: 2,
         borderBottomColor: 'black'
+    },
+    image: {
+        display: 'flex',
+        placeItems: 'center',
+        placeContent: 'center',
+        textAlign: 'center',
+        width: '33%',
+        paddingVertical: 3,
+        marginVertical: 5,
+        marginHorizontal: 5,
+        height: 300,
+        width: 225
     }
 
 });
