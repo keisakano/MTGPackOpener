@@ -45,7 +45,7 @@ export default function Booster() {
 
     const [booster, setBooster] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [flipFace, setFlipFace] = useState(false);
+    // const [flipFace, setFlipFace] = useState(false);
 
     useEffect(() => {
         if (cards.length > 0) {
@@ -115,74 +115,11 @@ export default function Booster() {
     }
 
 
-    const getCardArtURI = ({ item }) => {
-        const hasTwoFaces = item?.card_faces?.[0].image_uris
-        const hasCardFaces = item?.card_faces;
-
-        if (hasTwoFaces) {
-            const { 0: { image_uris: { normal: faceOneUri = '' } = {} } = {}, 1: { image_uris: { normal: faceTwoUri = '' } = {} } = {} } = hasCardFaces;
-            return { faceOneUri, faceTwoUri };
-        } else {
-            const { image_uris } = item;
-            const { normal = "" } = image_uris ?? {};
-            return { faceOneUri: normal };
-        }
-    }
-
-    const getTitleStyle = (rarity = '') => {
-        const titleColor = rarity === 'rare' ? '#ad7f45' : rarity === 'mythic' ? '#a61903' : 'black';
-        const titleStyle = { ...StyleSheet.flatten(styles.titleText), color: titleColor };
-
-        return titleStyle;
-    }
-
     const renderItem = ({ item }) => {
-        const titleStyle = getTitleStyle(item?.rarity);
-        const { faceOneUri, faceTwoUri } = getCardArtURI({ item });
 
-
-        // ^^turn conditional styling into tunrary styling
-        if (faceTwoUri) {
-            return (
-                <View style={styles.booster}>
-                    <TouchableOpacity
-                        onPress={() => Linking.openURL(item.scryfall_uri)}
-                        style={styles.booster}
-                    >
-                        <Text style={titleStyle}>{flipFace === true ? item.card_faces[1].name : item.card_faces[0].name}</Text>
-                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                    </TouchableOpacity>
-                    <View
-                        style={styles.booster}
-                    >
-                        <Image style={{ height: 300, width: 225 }} source={flipFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
-                        <TouchableOpacity
-                            onPress={() => flipFace === false ? setFlipFace(true) : setFlipFace(false)}
-                        >
-                            <Text>Flip Me</Text>
-                        </TouchableOpacity>
-                    </View>
-
-
-                </View>
-            )
-        }
-        else {
-            return (
-                <View style={styles.booster}>
-                    <TouchableOpacity
-                        onPress={() => Linking.openURL(item.scryfall_uri)}
-                        style={styles.booster}
-                    >
-                        <Text style={titleStyle}>{item.name}</Text>
-                        <Text style={styles.price}>Price: ${item.prices.usd}</Text>
-                    </TouchableOpacity>
-                    <Image style={styles.image} source={{ uri: faceOneUri }} />
-
-                </View>
-            )
-
-        }
+        return (
+            <BoosterCard item={item} />
+        )
     };
 
     return (
@@ -209,6 +146,76 @@ export default function Booster() {
             </TouchableOpacity>
         </SafeAreaView>
     );
+}
+const BoosterCard = ({ item }) => {
+
+    const getCardArtURI = ({ item }) => {
+        const hasTwoFaces = item?.card_faces?.[0].image_uris
+        const hasCardFaces = item?.card_faces;
+
+        if (hasTwoFaces) {
+            const { 0: { image_uris: { normal: faceOneUri = '' } = {} } = {}, 1: { image_uris: { normal: faceTwoUri = '' } = {} } = {} } = hasCardFaces;
+            return { faceOneUri, faceTwoUri };
+        } else {
+            const { image_uris } = item;
+            const { normal = "" } = image_uris ?? {};
+            return { faceOneUri: normal };
+        }
+    }
+
+    const getTitleStyle = (rarity = '') => {
+        const titleColor = rarity === 'rare' ? '#ad7f45' : rarity === 'mythic' ? '#a61903' : 'black';
+        const titleStyle = { ...StyleSheet.flatten(styles.titleText), color: titleColor };
+
+        return titleStyle;
+    }
+    const titleStyle = getTitleStyle(item?.rarity);
+    const { faceOneUri, faceTwoUri } = getCardArtURI({ item });
+    let flippedFace = false;
+    console.log('flippedFace: ', flippedFace);
+
+    if (faceTwoUri) {
+        return (
+            <View style={styles.booster}>
+                <TouchableOpacity
+                    onPress={() => Linking.openURL(item.scryfall_uri)}
+                    style={styles.booster}
+                >
+                    <Text style={titleStyle}>{flippedFace === true ? item.card_faces[1].name : item.card_faces[0].name}</Text>
+                    <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+                </TouchableOpacity>
+                <View
+                    style={styles.booster}
+                >
+                    <Image style={{ height: 300, width: 225 }} source={flippedFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
+                    <TouchableOpacity
+                        onPress={() => flippedFace === false ? flippedFace = true : flippedFace = false}
+                    >
+                        <Text>Flip Me</Text>
+                    </TouchableOpacity>
+                </View>
+
+
+            </View>
+        )
+    }
+    else {
+        return (
+            <View style={styles.booster}>
+                <TouchableOpacity
+                    onPress={() => Linking.openURL(item.scryfall_uri)}
+                    style={styles.booster}
+                >
+                    <Text style={titleStyle}>{item.name}</Text>
+                    <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+                </TouchableOpacity>
+                <Image style={styles.image} source={{ uri: faceOneUri }} />
+
+            </View>
+        )
+
+    }
+
 }
 
 const styles = StyleSheet.create({
