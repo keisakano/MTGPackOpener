@@ -116,7 +116,6 @@ export default function Booster() {
 
 
     const renderItem = ({ item }) => {
-
         return (
             <BoosterCard item={item} />
         )

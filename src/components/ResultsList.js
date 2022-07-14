@@ -58,20 +58,20 @@ const ResultsList = () => {
     })
 
     return (
-        <SafeAreaView style={{ flex: 1, alignItems: 'center' }}>
+        <SafeAreaView style={styles.container}>
             <TextInput
                 style={styles.search}
                 placeholder="Search Sets"
                 id="searchInput"
                 onChange={handleChange}
                 value={searchField}
-            // ^^figure out how to remove default styling when selected
             ></TextInput>
             <FlatList
                 showsVerticalScrollIndicator={false}
                 data={filteredSets}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.code}
+                style={styles.setList}
             />
         </SafeAreaView>
     );
@@ -100,6 +100,26 @@ const styles = StyleSheet.create({
         height: 15,
         width: 15,
         marginRight: 5
+    },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'hsl(180, 20%, 95%)'
+    },
+    setList: {
+        width: '50%',
+        paddingHorizontal: 6,
+        paddingLeft: 140,
+        marginBottom: 10,
+        border: '1px solid hsl(180, 20%, 90%)',
+        borderRadius: 5,
+        shadowColor: '#171717',
+        shadowOffset: { width: -1, height: 4 },
+        shadowOpacity: .2,
+        shadowRadius: 3,
+        backgroundColor: 'hsl(180, 20%, 93%)'
     }
 })
 
