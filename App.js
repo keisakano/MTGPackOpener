@@ -29,7 +29,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="MTGThing" component={HomeScreen} />
         <Stack.Screen name="Booster" component={Booster} />
         <Stack.Screen name="Set Details" component={SetDetails} />
       </Stack.Navigator>

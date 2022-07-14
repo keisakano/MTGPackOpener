@@ -81,16 +81,16 @@ const ResultsList = () => {
 const styles = StyleSheet.create({
 
     listItems: {
-        fontSize: 20,
+        fontSize: 25,
     },
     touchables: {
         marginVertical: 5
     },
     search: {
-        width: 200,
+        width: 250,
         borderWidth: 2,
         borderColor: 'black',
-        paddingVertical: 5,
+        paddingVertical: 10,
         paddingHorizontal: 3,
         marginVertical: 10,
         borderRadius: 5,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     setList: {
         width: '50%',
         paddingHorizontal: 6,
-        paddingLeft: 140,
+        // paddingLeft: 140,
         marginBottom: 10,
         border: '1px solid hsl(180, 20%, 90%)',
         borderRadius: 5,

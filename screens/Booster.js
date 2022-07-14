@@ -268,10 +268,11 @@ const styles = StyleSheet.create({
         placeItems: 'center',
         placeContent: 'center',
         textAlign: 'center',
-        width: '33%',
+        width: '100%',
         paddingVertical: 3,
         marginVertical: 5,
         marginHorizontal: 5,
+        // height: '80%'
         height: 300,
         width: 225
     }
