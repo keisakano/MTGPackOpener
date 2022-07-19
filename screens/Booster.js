@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, Linking, SafeAreaView } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/core';
 import { useMediaQuery } from 'react-responsive';
 
@@ -9,6 +9,12 @@ const axios = require('axios');
 // Lorwyn and Eldritch Moon are a little buggy, eldritch because of two piece cards
 // Running into error with older sets where prices aren't available for some cards which throws error when trying to display prices
 export default function Booster() {
+    const isDesktopOrLaptop = useMediaQuery({
+        query: '(min-width: 1024px)'
+    });
+    const isMobile = useMediaQuery({
+        query: '(max-width: 601px)'
+    });
     const { params: { setName, setCode, cardCount, setBlock, scryfallUri } } = useRoute();
     const navigation = useNavigation();
     const goToSetDetails = ({ setName, setCode, cardCount, setBlock, scryfallUri }) => navigation.navigate('Set Details', { setName, setCode, cardCount, setBlock, scryfallUri });
