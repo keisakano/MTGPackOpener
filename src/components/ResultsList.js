@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput, SafeAreaView, Image } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { useMediaQuery } from 'react-responsive';
 
 const axios = require('axios');
 
