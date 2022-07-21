@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/core';
 
 const axios = require('axios');
 
-export default function setDetails() {
+export default function SetDetails() {
     const { params: { setName, setCode, cardCount, setBlock, scryfallUri } } = useRoute();
     console.log('scryfallUri: ', scryfallUri)
     if (setBlock) {

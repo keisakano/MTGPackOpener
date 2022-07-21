@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput, SafeAreaView, Image, Platform } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components/native';
 import styled from 'styled-components/native';
@@ -31,11 +31,28 @@ const ResultsList = () => {
         hitAPI()
     }, [])
 
+    const isMobile = Platform.OS === 'ios';
+
     const SetNameText = styled(Text)`
-    font-size: ${({ theme: { setNameTextStyle } }) => setNameTextStyle.fontSize}
+    font-size: ${({ theme: { setNameTextStyle } }) => setNameTextStyle.fontSize};
     `
     const Touchables = styled(TouchableOpacity)`
-    margin-vertical: ${props => props.theme.touchablesStyle.marginVertical}
+    margin-vertical: ${props => props.theme.touchablesStyle.marginVertical};
+    `
+    const SetIcon = styled(Image)`
+    height: ${props => props.theme.setIconStyle.height}; width: ${props => props.theme.setIconStyle.width}; margin-right: ${props => props.theme.setIconStyle.marginRight};
+    `
+    const SetList = styled(FlatList)`
+    width: ${props => props.theme.setListStyle.width};
+        padding-horizontal: ${props => props.theme.setListStyle.paddingHorizontal};
+        margin-bottom: ${props => props.theme.setListStyle.marginBottom};
+        border: ${props => props.theme.setListStyle.border};
+        ${isMobile && `box-shadow: ${props => props.theme.setListStyle.boxShadow};`}
+        border-radius: ${props => props.theme.setListStyle.borderRadius};
+        background-color: ${props => props.theme.setListStyle.backgroundColor};
+        shadow-color: ${props => props.theme.setListStyle.shadowColor};
+    shadow-opacity: ${props => props.theme.setListStyle.shadowOpacity};
+    shadow-radius: ${props => props.theme.setListStyle.shadowRadius};
     `
 
     const renderItem = ({ item }) => {
@@ -44,9 +61,8 @@ const ResultsList = () => {
             <Touchables
                 onPress={() => goToBooster({ setName, setCode, cardCount, setBlock, scryfallUri })}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Image
-                        source={setImg}
-                        style={styles.setIcon}
+                    <SetIcon
+                        source={{ uri: setImg }}
                     />
                     <SetNameText>
                         {setName}</SetNameText>
@@ -78,7 +94,7 @@ const ResultsList = () => {
                 onChange={handleChange}
                 value={searchField}
             ></TextInput>
-            <FlatList
+            <SetList
                 showsVerticalScrollIndicator={false}
                 data={filteredSets}
                 renderItem={renderItem}
@@ -121,17 +137,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'hsl(180, 20%, 95%)'
     },
     setList: {
-        width: '50%',
-        paddingHorizontal: 6,
-        // paddingLeft: 140,
-        marginBottom: 10,
-        border: '1px solid hsl(180, 20%, 90%)',
-        borderRadius: 5,
-        shadowColor: '#171717',
         shadowOffset: { width: -1, height: 4 },
-        shadowOpacity: .2,
-        shadowRadius: 3,
-        backgroundColor: 'hsl(180, 20%, 93%)'
     }
 })
 
