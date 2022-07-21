@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, TextInput, SafeAreaView, Image } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { useMediaQuery } from 'react-responsive';
+import { useTheme } from 'styled-components/native';
+import styled from 'styled-components/native';
 
 const axios = require('axios');
 
@@ -30,19 +31,27 @@ const ResultsList = () => {
         hitAPI()
     }, [])
 
+    const SetNameText = styled(Text)`
+    font-size: ${({ theme: { setNameTextStyle } }) => setNameTextStyle.fontSize}
+    `
+    const Touchables = styled(TouchableOpacity)`
+    margin-vertical: ${props => props.theme.touchablesStyle.marginVertical}
+    `
+
     const renderItem = ({ item }) => {
         const { name: setName, code: setCode, icon_svg_uri: setImg, card_count: cardCount, block: setBlock, scryfall_uri: scryfallUri } = item;
         return (
-            <TouchableOpacity
-                style={styles.touchables}
+            <Touchables
                 onPress={() => goToBooster({ setName, setCode, cardCount, setBlock, scryfallUri })}>
-                <Text style={styles.listItems}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
                         source={setImg}
                         style={styles.setIcon}
                     />
-                    {setName}</Text>
-            </TouchableOpacity>
+                    <SetNameText>
+                        {setName}</SetNameText>
+                </View>
+            </Touchables>
         )
     }
 
@@ -57,6 +66,8 @@ const ResultsList = () => {
             set.name.toLowerCase().includes(searchField.toLowerCase())
         )
     })
+
+
 
     return (
         <SafeAreaView style={styles.container}>

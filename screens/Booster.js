@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, Linking, Saf
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/core';
 import { useMediaQuery } from 'react-responsive';
+import { useTheme } from 'styled-components';
 
 const axios = require('axios');
 
@@ -128,6 +129,8 @@ export default function Booster() {
         )
     };
 
+    const theme = useTheme();
+    console.log('theme: ', theme);
     return (
         <SafeAreaView style={styles.container}>
             <TouchableOpacity
@@ -237,7 +240,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         placeItems: 'center',
-        border: '1px solid rebeccapurple'
     },
     titleText: {
         fontSize: 20,
