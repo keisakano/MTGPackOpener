@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, Linking, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, Linking, SafeAreaView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/core';
 import { useMediaQuery } from 'react-responsive';
@@ -117,6 +117,11 @@ export default function Booster() {
         return { fullPack, packValue };
     }
 
+    const CardNameText = styled(Text)`
+    
+    `
+
+    const isMobile = Platform.OS === 'ios';
 
     const renderItem = ({ item }) => {
         return (
@@ -124,9 +129,35 @@ export default function Booster() {
         )
     };
 
-    const theme = useTheme();
-    console.log('theme: ', theme);
-    return (
+
+    return isMobile ? (
+        (
+            <SafeAreaView style={styles.container}>
+                <TouchableOpacity
+                    onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
+                    style={styles.touchable}
+                >
+                    <Text>Go to set details</Text>
+                </TouchableOpacity>
+                <Text style={styles.totalPrice}>Total pack value: {totalPrice}</Text>
+                <FlatList
+                    // showsVerticalScrollIndicator={false}
+                    data={booster}
+                    renderItem={renderItem}
+                    keyExtractor={item => item?.id}
+                    numColumns={1}
+                    style={styles.flatList}
+                />
+                <TouchableOpacity
+                    style={styles.touchable}
+                    onPress={refreshPage}
+                >
+                    <Text>Generate New Booster</Text>
+                </TouchableOpacity>
+            </SafeAreaView>
+        )
+
+    ) : (
         <SafeAreaView style={styles.container}>
             <TouchableOpacity
                 onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
@@ -141,6 +172,7 @@ export default function Booster() {
                 renderItem={renderItem}
                 keyExtractor={item => item?.id}
                 numColumns={3}
+                style={styles.flatList}
             />
             <TouchableOpacity
                 style={styles.touchable}
@@ -152,6 +184,19 @@ export default function Booster() {
     );
 }
 const BoosterCard = ({ item }) => {
+    const isMobile = Platform.OS === 'ios';
+
+    const CardImage = styled(Image)`
+    display: ${props => props.theme.cardImageStyle.display};
+    align-items: ${props => props.theme.cardImageStyle.placeItems};
+    align-content: ${props => props.theme.cardImageStyle.placeContent};
+    text-align: ${props => props.theme.cardImageStyle.textAlign};
+    padding-vertical: ${props => props.theme.cardImageStyle.paddingVertical};
+    margin-vertical: ${props => props.theme.cardImageStyle.marginVertical};
+    margin-horizontal: ${props => props.theme.cardImageStyle.marginHorizontal};
+    height: ${props => props.theme.cardImageStyle.height};
+    width: ${props => props.theme.cardImageStyle.width};
+    `
     const [flipFace, setFlipFace] = useState(false);
 
     const getCardArtURI = ({ item }) => {
@@ -176,6 +221,15 @@ const BoosterCard = ({ item }) => {
         return titleStyle;
     }
     const titleStyle = getTitleStyle(item?.rarity);
+
+    const getMobileTextStyle = (rarity = '') => {
+        const titleColor = rarity === 'rare' ? '#ad7f45' : rarity === 'mythic' ? '#a61903' : 'black';
+        const titleStyle = { ...StyleSheet.flatten(styles.mobileText), color: titleColor };
+
+        return titleStyle;
+    }
+    const mobileTextStyle = getMobileTextStyle(item?.rarity);
+
     const { faceOneUri, faceTwoUri } = getCardArtURI({ item });
 
 
@@ -186,13 +240,13 @@ const BoosterCard = ({ item }) => {
                     onPress={() => Linking.openURL(item.scryfall_uri)}
                     style={styles.booster}
                 >
-                    <Text style={titleStyle}>{flipFace === true ? item.card_faces[1].name : item.card_faces[0].name}</Text>
+                    <Text style={isMobile ? mobileTextStyle : titleStyle}>{flipFace === true ? item.card_faces[1].name : item.card_faces[0].name}</Text>
                     <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                 </TouchableOpacity>
                 <View
                     style={styles.booster}
                 >
-                    <Image style={{ height: 300, width: 225 }} source={flipFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
+                    <CardImage source={flipFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
                 </View>
                 <TouchableOpacity
                     onPress={() => flipFace === false ? setFlipFace(true) : setFlipFace(false)}
@@ -209,10 +263,10 @@ const BoosterCard = ({ item }) => {
                     onPress={() => Linking.openURL(item.scryfall_uri)}
                     style={styles.booster}
                 >
-                    <Text style={titleStyle}>{item.name}</Text>
+                    <Text style={isMobile ? mobileTextStyle : titleStyle}>{item.name}</Text>
                     <Text style={styles.price}>Price: ${item.prices.usd}</Text>
                 </TouchableOpacity>
-                <Image style={styles.image} source={{ uri: faceOneUri }} />
+                <CardImage source={{ uri: faceOneUri }} />
 
             </View>
         )
@@ -224,8 +278,8 @@ const BoosterCard = ({ item }) => {
 const styles = StyleSheet.create({
     booster: {
         display: 'flex',
-        placeItems: 'center',
-        placeContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center',
         textAlign: 'center',
         width: '33%',
         paddingVertical: 3,
@@ -234,9 +288,19 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        placeItems: 'center',
+        alignItems: 'center',
+        alignContent: 'center'
+    },
+    flatList: {
+        border: '3px solid red'
     },
     titleText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 2,
+        width: '350%'
+    },
+    mobileText: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 2,
@@ -269,14 +333,13 @@ const styles = StyleSheet.create({
     },
     image: {
         display: 'flex',
-        placeItems: 'center',
+        alignItems: 'center',
         placeContent: 'center',
         textAlign: 'center',
         width: '100%',
         paddingVertical: 3,
         marginVertical: 5,
         marginHorizontal: 5,
-        // height: '80%'
         height: 300,
         width: 225
     }

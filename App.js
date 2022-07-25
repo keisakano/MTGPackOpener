@@ -47,7 +47,19 @@ export default function App() {
     boxShadow: isMobile ? '-1px 4px 3px rgba(23,23,23,.2)' : '',
     backgroundColor: isWeb ? 'hsl(180, 20%, 93%)' : 'hsl(180, 20%, 93%)'
   }
-  const theme = { isMobile, isWeb, setNameTextStyle, touchablesStyle, setIconStyle, setListStyle };
+  const cardNameTextStyle = {}
+  const cardImageStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    alignContent: 'center',
+    textAlign: 'center',
+    paddingVertical: '3px',
+    marginVertical: '5px',
+    marginHorizontal: isWeb ? '5px' : 'null',
+    height: isWeb ? '300px' : '192px',
+    width: isWeb ? '225px' : '144px'
+  }
+  const theme = { isMobile, isWeb, setNameTextStyle, touchablesStyle, setIconStyle, setListStyle, cardNameTextStyle, cardImageStyle };
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <NavigationContainer>
