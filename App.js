@@ -39,12 +39,16 @@ export default function App() {
   const touchablesStyle = { marginVertical: isWeb ? '10px' : '5px' }
   const setIconStyle = { height: isWeb ? '15px' : '12px', width: isWeb ? '15px' : '12px', marginRight: isWeb ? '5px' : '4px' }
   const setListStyle = {
-    width: isWeb ? '50%' : '75%', paddingHorizontal: isWeb ? '6px' : '4.8px', marginBottom: isWeb ? '10px' : '8px',
-    border: isWeb ? '1px solid hsl(180, 20%, 90%)' : '1px solid hsl(180, 20%, 90%)', borderRadius: isWeb ? '5px' : '4px',
+    width: isWeb ? '50%' : '75%',
+    paddingHorizontal: isWeb ? '6px' : '4.8px',
+    marginBottom: isWeb ? '10px' : '8px',
+    border: isWeb ? '1px solid hsl(180, 20%, 90%)' : '1px solid hsl(180, 20%, 90%)',
+    borderRadius: isWeb ? '5px' : '4px',
     shadowColor: isWeb ? '#171717' : '',
     shadowOffset: isWeb ? ' width: -1, height: 4 ' : '',
-    shadowOpacity: isWeb ? .2 : '', shadowRadius: isWeb ? '3px' : '',
-    boxShadow: isMobile ? '-1px 4px 3px rgba(23,23,23,.2)' : '',
+    shadowOpacity: isWeb ? '.8' : '',
+    shadowRadius: isWeb ? '3px' : '',
+    boxShadow: isWeb ? '-1px 4px 3px rgba(23,23,23,.2)' : '',
     backgroundColor: isWeb ? 'hsl(180, 20%, 93%)' : 'hsl(180, 20%, 93%)'
   }
   const cardNameTextStyle = {}

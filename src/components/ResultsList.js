@@ -32,6 +32,7 @@ const ResultsList = () => {
     }, [])
 
     const isMobile = Platform.OS === 'ios';
+    const isWeb = Platform.OS === 'web';
 
     const SetNameText = styled(Text)`
     font-size: ${({ theme: { setNameTextStyle } }) => setNameTextStyle.fontSize};
@@ -47,12 +48,15 @@ const ResultsList = () => {
         padding-horizontal: ${props => props.theme.setListStyle.paddingHorizontal};
         margin-bottom: ${props => props.theme.setListStyle.marginBottom};
         border: ${props => props.theme.setListStyle.border};
-        ${isMobile && `box-shadow: ${props => props.theme.setListStyle.boxShadow};`}
+        ${isWeb && `
+        box-shadow: ${props => props.theme.setListStyle.boxShadow}; 
+        `}
+        shadow-color: ${props => props.theme.setListStyle.shadowColor};
+        shadow-opacity: ${props => props.theme.setListStyle.shadowOpacity};
+        shadow-radius: ${props => props.theme.setListStyle.shadowRadius};
         border-radius: ${props => props.theme.setListStyle.borderRadius};
         background-color: ${props => props.theme.setListStyle.backgroundColor};
-        shadow-color: ${props => props.theme.setListStyle.shadowColor};
-    shadow-opacity: ${props => props.theme.setListStyle.shadowOpacity};
-    shadow-radius: ${props => props.theme.setListStyle.shadowRadius};
+        
     `
 
     const renderItem = ({ item }) => {
