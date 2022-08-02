@@ -151,7 +151,7 @@ export default function Booster() {
       </TouchableOpacity>
       <Text style={styles.totalPrice}>Total pack value: {totalPrice}</Text>
       <FlatList
-        // showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         data={booster}
         renderItem={renderItem}
         keyExtractor={(item) => item?.id}
@@ -190,15 +190,24 @@ const BoosterCard = ({ item }) => {
 
   const CardImage = styled(Image)`
     display: ${(props) => props.theme.cardImageStyle.display};
-    align-items: ${(props) => props.theme.cardImageStyle.placeItems};
-    align-content: ${(props) => props.theme.cardImageStyle.placeContent};
-    text-align: ${(props) => props.theme.cardImageStyle.textAlign};
     padding-vertical: ${(props) => props.theme.cardImageStyle.paddingVertical};
     margin-vertical: ${(props) => props.theme.cardImageStyle.marginVertical};
     margin-horizontal: ${(props) => props.theme.cardImageStyle.marginHorizontal};
     height: ${(props) => props.theme.cardImageStyle.height};
     width: ${(props) => props.theme.cardImageStyle.width};
   `;
+
+  const CardContainer = styled(View)`
+   display: ${(props) => props.theme.cardContainer.display}
+   align-items: ${(props) => props.theme.cardContainer.alignItems}
+   align-content: ${(props) => props.theme.cardContainer.alignContent}
+   text-align: ${(props) => props.theme.cardContainer.textAlign}
+   width: ${(props) => props.theme.cardContainer.width}
+   padding-vertical: ${(props) => props.theme.cardContainer.paddingVertical}
+   margin-vertical: ${(props) => props.theme.cardContainer.marginVertical}
+   margin-horizontal: ${(props) => props.theme.cardContainer.marginHorizontal}
+   `;
+
   const [flipFace, setFlipFace] = useState(false);
 
   const getCardArtURI = ({ item }) => {
@@ -238,30 +247,30 @@ const BoosterCard = ({ item }) => {
 
   if (faceTwoUri) {
     return (
-      <View style={styles.booster}>
-        <TouchableOpacity onPress={() => Linking.openURL(item.scryfall_uri)} style={styles.booster}>
+      <CardContainer>
+        <TouchableOpacity onPress={() => Linking.openURL(item.scryfall_uri)}>
           <Text style={isMobile ? mobileTextStyle : titleStyle}>
             {flipFace === true ? item.card_faces[1].name : item.card_faces[0].name}
           </Text>
           <Text style={styles.price}>Price: ${item.prices.usd}</Text>
         </TouchableOpacity>
-        <View style={styles.booster}>
+        <CardContainer>
           <CardImage source={flipFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
-        </View>
+        </CardContainer>
         <TouchableOpacity onPress={() => (flipFace === false ? setFlipFace(true) : setFlipFace(false))}>
           <Text>Flip Me</Text>
         </TouchableOpacity>
-      </View>
+      </CardContainer>
     );
   } else {
     return (
-      <View style={styles.booster}>
-        <TouchableOpacity onPress={() => Linking.openURL(item.scryfall_uri)} style={styles.booster}>
+      <CardContainer>
+        <TouchableOpacity onPress={() => Linking.openURL(item.scryfall_uri)}>
           <Text style={isMobile ? mobileTextStyle : titleStyle}>{item.name}</Text>
           <Text style={styles.price}>Price: ${item.prices.usd}</Text>
         </TouchableOpacity>
         <CardImage source={{ uri: faceOneUri }} />
-      </View>
+      </CardContainer>
     );
   }
 };
@@ -284,18 +293,19 @@ const styles = StyleSheet.create({
   },
   flatList: {
     border: "3px solid red",
+    // width: "100%",
   },
   titleText: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 2,
-    width: "350%",
+    width: "95%",
   },
   mobileText: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 2,
-    width: "350%",
+    width: "95%",
   },
   touchable: {
     fontSize: 20,
