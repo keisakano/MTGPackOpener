@@ -254,9 +254,9 @@ const BoosterCard = ({ item }) => {
           </Text>
           <Text style={styles.price}>Price: ${item.prices.usd}</Text>
         </TouchableOpacity>
-        <CardContainer>
-          <CardImage source={flipFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
-        </CardContainer>
+        {/* <CardContainer> */}
+        <CardImage source={flipFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
+        {/* </CardContainer> */}
         <TouchableOpacity onPress={() => (flipFace === false ? setFlipFace(true) : setFlipFace(false))}>
           <Text>Flip Me</Text>
         </TouchableOpacity>
@@ -282,9 +282,9 @@ const styles = StyleSheet.create({
     alignContent: "center",
     textAlign: "center",
     width: "33%",
-    paddingVertical: 3,
-    marginVertical: 5,
-    marginHorizontal: 4,
+    paddingVertical: "3px",
+    marginVertical: "5px",
+    marginHorizontal: "4px",
   },
   container: {
     flex: 1,
@@ -292,14 +292,14 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
   flatList: {
-    border: "3px solid red",
+    // border: "3px solid red",
     // width: "100%",
   },
   titleText: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 2,
-    width: "95%",
+    width: "100%",
   },
   mobileText: {
     fontSize: 20,
@@ -323,6 +323,7 @@ const styles = StyleSheet.create({
   },
   price: {
     marginBottom: 2,
+    textAlign: "center",
   },
   totalPrice: {
     marginBottom: 8,

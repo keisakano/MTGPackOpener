@@ -105,7 +105,7 @@ const ResultsList = () => {
   const names = sortedSets;
 
   const filteredSets = names.filter((set) => {
-    return set.name.toLowerCase().includes(searchField.toLowerCase());
+    return set.name?.toLowerCase()?.includes(searchField?.toLowerCase() || "");
   });
 
   return (

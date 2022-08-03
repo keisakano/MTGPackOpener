@@ -55,8 +55,8 @@ export default function App() {
     paddingVertical: "3px",
     marginVertical: "5px",
     marginHorizontal: isWeb ? "5px" : "null",
-    height: isWeb ? "300px" : "330px",
-    width: isWeb ? "225px" : "247.5px",
+    height: isWeb ? "300px" : "360px",
+    width: isWeb ? "225px" : "270px",
   };
   const cardContainer = {
     display: "flex",
