@@ -29,7 +29,7 @@ const Navigator = () => {
 export default function App() {
   const isMobile = Platform.OS === "ios";
   const isWeb = Platform.OS === "web";
-  const setNameTextStyle = { fontSize: isWeb ? "25px" : "20px" };
+  const setNameTextStyle = { fontSize: isWeb ? "25px" : "22px" };
   const touchablesStyle = { marginVertical: isWeb ? "10px" : "5px" };
   const setIconStyle = {
     height: isWeb ? "15px" : "12px",
@@ -37,7 +37,7 @@ export default function App() {
     marginRight: isWeb ? "5px" : "4px",
   };
   const setListStyle = {
-    width: isWeb ? "50%" : "75%",
+    width: isWeb ? "50%" : "80%",
     paddingHorizontal: isWeb ? "6px" : "4.8px",
     marginBottom: isWeb ? "10px" : "8px",
     border: isWeb ? "1px solid hsl(180, 20%, 90%)" : "1px solid hsl(180, 20%, 90%)",
@@ -63,14 +63,25 @@ export default function App() {
     alignItems: "center",
     alignContent: "center",
     textAlign: "center",
-    width: isWeb ? "33%" : "100%",
-    paddingVertical: 3,
-    marginVertical: 5,
-    marginHorizontal: 4,
+    width: isWeb ? "300px" : "300px",
+    // ^^wierd numbers becaue if 33% and 100% rightmost card gets cut off on right
+    paddingVertical: "7px",
+    marginVertical: isWeb ? "8px" : "5px",
+    marginHorizontal: isWeb ? "10px" : "0px",
+    backgroundColor: "hsl(180, 20%, 85%)",
+    border: isWeb ? "1px solid hsl(180, 20%, 85%)" : "1px solid hsl(180, 20%, 85%)",
+    borderRadius: isWeb ? "5px" : "10px",
   };
   const cardPrice = {
     marginBottom: "2px",
     textAlign: "center",
+    color: "hsl(180, 60%, 25%)",
+  };
+  const screenContainer = {
+    flex: "1",
+    alignItems: "center",
+    alignContent: "center",
+    backgroundColor: "hsl(180,20%,95%)",
   };
   const theme = {
     isMobile,
@@ -83,6 +94,7 @@ export default function App() {
     cardImageStyle,
     cardContainer,
     cardPrice,
+    screenContainer,
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>

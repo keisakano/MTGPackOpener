@@ -134,6 +134,12 @@ export default function Booster() {
   };
 
   const CardNameText = styled(Text)``;
+  const ScreenContainer = styled(SafeAreaView)`
+    flex: ${(props) => props.theme.screenContainer.flex};
+    align-items: ${(props) => props.theme.screenContainer.alignItems};
+    align-content: ${(props) => props.theme.screenContainer.alignContent};
+    background-color: ${(props) => props.theme.screenContainer.backgroundColor};
+  `;
 
   const isMobile = Platform.OS === "ios";
 
@@ -142,7 +148,7 @@ export default function Booster() {
   };
 
   return isMobile ? (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer>
       <TouchableOpacity
         onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
         style={styles.touchable}
@@ -161,9 +167,9 @@ export default function Booster() {
       <TouchableOpacity style={styles.touchable} onPress={refreshPage}>
         <Text>Generate New Booster</Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </ScreenContainer>
   ) : (
-    <SafeAreaView style={styles.container}>
+    <ScreenContainer>
       <TouchableOpacity
         onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
         style={styles.touchable}
@@ -182,7 +188,7 @@ export default function Booster() {
       <TouchableOpacity style={styles.touchable} onPress={refreshPage}>
         <Text>Generate New Booster</Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </ScreenContainer>
   );
 }
 const BoosterCard = ({ item }) => {
@@ -198,20 +204,24 @@ const BoosterCard = ({ item }) => {
   `;
 
   const CardContainer = styled(View)`
-   display: ${(props) => props.theme.cardContainer.display}
-   align-items: ${(props) => props.theme.cardContainer.alignItems}
-   align-content: ${(props) => props.theme.cardContainer.alignContent}
-   text-align: ${(props) => props.theme.cardContainer.textAlign}
-   width: ${(props) => props.theme.cardContainer.width}
-   padding-vertical: ${(props) => props.theme.cardContainer.paddingVertical}
-   margin-vertical: ${(props) => props.theme.cardContainer.marginVertical}
-   margin-horizontal: ${(props) => props.theme.cardContainer.marginHorizontal}
-   `;
+    display: ${(props) => props.theme.cardContainer.display};
+    align-items: ${(props) => props.theme.cardContainer.alignItems};
+    align-content: ${(props) => props.theme.cardContainer.alignContent};
+    text-align: ${(props) => props.theme.cardContainer.textAlign};
+    width: ${(props) => props.theme.cardContainer.width};
+    padding-vertical: ${(props) => props.theme.cardContainer.paddingVertical};
+    margin-vertical: ${(props) => props.theme.cardContainer.marginVertical};
+    margin-horizontal: ${(props) => props.theme.cardContainer.marginHorizontal};
+    background-color: ${(props) => props.theme.cardContainer.backgroundColor};
+    border: ${(props) => props.theme.cardContainer.border};
+    border-radius: ${(props) => props.theme.cardContainer.borderRadius};
+  `;
 
   const CardPrice = styled(Text)`
-   margin-bottom: ${(props) => props.theme.cardPrice.marginBottom}
-   text-align: ${(props) => props.theme.cardPrice.textAlign}
-   `;
+    margin-bottom: ${(props) => props.theme.cardPrice.marginBottom};
+    text-align: ${(props) => props.theme.cardPrice.textAlign};
+    color: ${(props) => props.theme.cardPrice.color};
+  `;
 
   const [flipFace, setFlipFace] = useState(false);
 
@@ -257,7 +267,7 @@ const BoosterCard = ({ item }) => {
           <Text style={isMobile ? mobileTextStyle : titleStyle}>
             {flipFace === true ? item.card_faces[1].name : item.card_faces[0].name}
           </Text>
-          <CardPrice style={styles.price}>Price: ${item.prices.usd}</CardPrice>
+          <CardPrice>Price: ${item.prices.usd}</CardPrice>
         </TouchableOpacity>
         {/* <CardContainer> */}
         <CardImage source={flipFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
@@ -272,7 +282,7 @@ const BoosterCard = ({ item }) => {
       <CardContainer>
         <TouchableOpacity onPress={() => Linking.openURL(item.scryfall_uri)}>
           <Text style={isMobile ? mobileTextStyle : titleStyle}>{item.name}</Text>
-          <CardPrice style={styles.price}>Price: ${item.prices.usd}</CardPrice>
+          <CardPrice>Price: ${item.prices.usd}</CardPrice>
         </TouchableOpacity>
         <CardImage source={{ uri: faceOneUri }} />
       </CardContainer>
