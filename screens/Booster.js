@@ -208,6 +208,11 @@ const BoosterCard = ({ item }) => {
    margin-horizontal: ${(props) => props.theme.cardContainer.marginHorizontal}
    `;
 
+  const CardPrice = styled(Text)`
+   margin-bottom: ${(props) => props.theme.cardPrice.marginBottom}
+   text-align: ${(props) => props.theme.cardPrice.textAlign}
+   `;
+
   const [flipFace, setFlipFace] = useState(false);
 
   const getCardArtURI = ({ item }) => {
@@ -252,7 +257,7 @@ const BoosterCard = ({ item }) => {
           <Text style={isMobile ? mobileTextStyle : titleStyle}>
             {flipFace === true ? item.card_faces[1].name : item.card_faces[0].name}
           </Text>
-          <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+          <CardPrice style={styles.price}>Price: ${item.prices.usd}</CardPrice>
         </TouchableOpacity>
         {/* <CardContainer> */}
         <CardImage source={flipFace === false ? { uri: faceOneUri } : { uri: faceTwoUri }} />
@@ -267,7 +272,7 @@ const BoosterCard = ({ item }) => {
       <CardContainer>
         <TouchableOpacity onPress={() => Linking.openURL(item.scryfall_uri)}>
           <Text style={isMobile ? mobileTextStyle : titleStyle}>{item.name}</Text>
-          <Text style={styles.price}>Price: ${item.prices.usd}</Text>
+          <CardPrice style={styles.price}>Price: ${item.prices.usd}</CardPrice>
         </TouchableOpacity>
         <CardImage source={{ uri: faceOneUri }} />
       </CardContainer>

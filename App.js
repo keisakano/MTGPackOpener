@@ -68,6 +68,10 @@ export default function App() {
     marginVertical: 5,
     marginHorizontal: 4,
   };
+  const cardPrice = {
+    marginBottom: "2px",
+    textAlign: "center",
+  };
   const theme = {
     isMobile,
     isWeb,
@@ -78,6 +82,7 @@ export default function App() {
     cardNameTextStyle,
     cardImageStyle,
     cardContainer,
+    cardPrice,
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>
