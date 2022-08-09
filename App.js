@@ -83,6 +83,11 @@ export default function App() {
     alignContent: "center",
     backgroundColor: "hsl(180,20%,95%)",
   };
+  const detailsCard = {
+    width: "100%",
+    height: isWeb ? "20%" : "20%",
+    backgroundColor: "hsl(180, 20%, 5%)",
+  };
   const theme = {
     isMobile,
     isWeb,
@@ -95,6 +100,7 @@ export default function App() {
     cardContainer,
     cardPrice,
     screenContainer,
+    detailsCard,
   };
   return (
     <SafeAreaView style={{ flex: 1 }}>

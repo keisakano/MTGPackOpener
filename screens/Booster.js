@@ -140,6 +140,11 @@ export default function Booster() {
     align-content: ${(props) => props.theme.screenContainer.alignContent};
     background-color: ${(props) => props.theme.screenContainer.backgroundColor};
   `;
+  const DetailsCard = styled(View)`
+    width: ${(props) => props.theme.detailsCard.width};
+    height: ${(props) => props.theme.detailsCard.height};
+    background-color: ${(props) => props.theme.detailsCard.backgroundColor};
+  `;
 
   const isMobile = Platform.OS === "ios";
 
@@ -149,13 +154,15 @@ export default function Booster() {
 
   return isMobile ? (
     <ScreenContainer>
-      <TouchableOpacity
-        onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
-        style={styles.touchable}
-      >
-        <Text>Go to set details</Text>
-      </TouchableOpacity>
-      <Text style={styles.totalPrice}>Total pack value: {totalPrice}</Text>
+      <DetailsCard>
+        <TouchableOpacity
+          onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
+          style={styles.touchable}
+        >
+          <Text style={styles.touchableText}>Go to set details</Text>
+        </TouchableOpacity>
+        <Text style={styles.totalPrice}>Total pack value: {totalPrice}</Text>
+      </DetailsCard>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={booster}
@@ -170,13 +177,15 @@ export default function Booster() {
     </ScreenContainer>
   ) : (
     <ScreenContainer>
-      <TouchableOpacity
-        onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
-        style={styles.touchable}
-      >
-        <Text>Go to set details</Text>
-      </TouchableOpacity>
-      <Text style={styles.totalPrice}>Total pack value: {totalPrice}</Text>
+      <DetailsCard>
+        <TouchableOpacity
+          onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
+          style={styles.touchable}
+        >
+          <Text style={styles.touchableText}>Go to set details</Text>
+        </TouchableOpacity>
+        <Text style={styles.totalPrice}>Total pack value: {totalPrice}</Text>
+      </DetailsCard>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={booster}
@@ -323,11 +332,12 @@ const styles = StyleSheet.create({
     width: "95%",
   },
   touchable: {
+    width: "20%",
     fontSize: 20,
     paddingVertical: 8,
     paddingHorizontal: 3,
     borderWidth: 3,
-    borderColor: "blue",
+    borderColor: "hsl(180, 60%, 25%)",
     borderRadius: 7,
   },
   rareTitleColor: {
@@ -340,11 +350,13 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     textAlign: "center",
   },
+  touchableText: {
+    color: "hsl(180, 60%, 95%)",
+  },
   totalPrice: {
     marginBottom: 8,
     marginTop: 6,
-    borderBottomWidth: 2,
-    borderBottomColor: "black",
+    color: "hsl(180, 60%, 95%)",
   },
   image: {
     display: "flex",
