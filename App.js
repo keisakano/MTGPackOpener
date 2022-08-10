@@ -87,6 +87,9 @@ export default function App() {
     width: "100%",
     height: isWeb ? "20%" : "20%",
     backgroundColor: "hsl(180, 20%, 5%)",
+    // alignItems: "center",
+    // alignContent: "left",
+    // justifyContent: "",
   };
   const theme = {
     isMobile,

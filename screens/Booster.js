@@ -144,6 +144,9 @@ export default function Booster() {
     width: ${(props) => props.theme.detailsCard.width};
     height: ${(props) => props.theme.detailsCard.height};
     background-color: ${(props) => props.theme.detailsCard.backgroundColor};
+    // align-items: ${(props) => props.theme.detailsCard.alignItems};
+    // align-content: ${(props) => props.theme.detailsCard.alignContent};
+    // justify-content: ${(props) => props.theme.detailsCard.justifyContent};
   `;
 
   const isMobile = Platform.OS === "ios";
@@ -155,13 +158,13 @@ export default function Booster() {
   return isMobile ? (
     <ScreenContainer>
       <DetailsCard>
-        <TouchableOpacity
-          onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
-          style={styles.touchable}
-        >
-          <Text style={styles.touchableText}>Go to set details</Text>
-        </TouchableOpacity>
-        <Text style={styles.totalPrice}>Total pack value: {totalPrice}</Text>
+        <View style={{ justifyContent: "center" }}>
+          <Text style={styles.touchableText}>{setName}</Text>
+        </View>
+        <View style={{ alignItems: "center" }}>
+          <Text style={{ color: "hsl(180, 60%, 95%)", fontSize: 20 }}>Total pack value:</Text>
+          <Text style={styles.totalPrice}>{totalPrice}</Text>
+        </View>
       </DetailsCard>
       <FlatList
         showsVerticalScrollIndicator={false}
@@ -178,13 +181,13 @@ export default function Booster() {
   ) : (
     <ScreenContainer>
       <DetailsCard>
-        <TouchableOpacity
-          onPress={() => goToSetDetails({ setName, setCode, cardCount, setBlock, scryfallUri })}
-          style={styles.touchable}
-        >
-          <Text style={styles.touchableText}>Go to set details</Text>
-        </TouchableOpacity>
-        <Text style={styles.totalPrice}>Total pack value: {totalPrice}</Text>
+        <View style={{ justifyContent: "center" }}>
+          <Text style={styles.touchableText}>{setName}</Text>
+        </View>
+        <View style={{ alignItems: "center" }}>
+          <Text style={{ color: "hsl(180, 60%, 95%)", fontSize: 20 }}>Total pack value:</Text>
+          <Text style={styles.totalPrice}>{totalPrice}</Text>
+        </View>
       </DetailsCard>
       <FlatList
         showsVerticalScrollIndicator={false}
@@ -354,8 +357,6 @@ const styles = StyleSheet.create({
     color: "hsl(180, 60%, 95%)",
   },
   totalPrice: {
-    marginBottom: 8,
-    marginTop: 6,
     color: "hsl(180, 60%, 95%)",
   },
   image: {
