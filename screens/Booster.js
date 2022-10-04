@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/core";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components/native";
+import LinearGradient from "react-native-linear-gradient";
 
 const axios = require("axios");
 
@@ -198,7 +199,7 @@ export default function Booster() {
         style={styles.flatList}
       />
       <TouchableOpacity style={styles.touchable} onPress={refreshPage}>
-        <Text>Generate New Booster</Text>
+        <Text style={{ alignSelf: "center" }}>Generate New Booster</Text>
       </TouchableOpacity>
     </ScreenContainer>
   );
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
     width: "95%",
   },
   touchable: {
-    width: "20%",
+    width: "12%",
     fontSize: 20,
     paddingVertical: 8,
     paddingHorizontal: 3,
@@ -355,6 +356,7 @@ const styles = StyleSheet.create({
   },
   touchableText: {
     color: "hsl(180, 60%, 95%)",
+    alignSelf: "center",
   },
   totalPrice: {
     color: "hsl(180, 60%, 95%)",

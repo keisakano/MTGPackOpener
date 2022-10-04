@@ -85,7 +85,7 @@ export default function App() {
   };
   const detailsCard = {
     width: "100%",
-    height: isWeb ? "20%" : "20%",
+    height: isWeb ? "10%" : "20%",
     backgroundColor: "hsl(180, 20%, 5%)",
     // alignItems: "center",
     // alignContent: "left",
