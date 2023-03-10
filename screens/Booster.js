@@ -14,7 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/core";
 import { useMediaQuery } from "react-responsive";
 import styled from "styled-components/native";
-import LinearGradient from "react-native-linear-gradient";
+// import LinearGradient from "react-native-linear-gradient";
 
 const axios = require("axios");
 
